@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Đọc và Tra cứu nhiều hóa đơn XML</title>
-<link rel="icon" href="iconbill.ico" type="image/x-icon">
+<link rel="icon" href="trunglam.ico" type="image/x-icon">
 
 <style>
 body{
@@ -84,7 +84,7 @@ a:hover{color:#003366}
 
 <script>
 const KEY_TTRUONG = [
- "Fkey","MTCuu","MTCHDon","Mã TC","Mã tra cứu","Mã tra cứu HĐ","Mã tra cứu hóa đơn",
+ "Fkey","MTCuu","MTCHDon","Mã TC","Mã tra cứu","Mã tra cứu HĐ","Mã tra cứu hóa đơn","Mã nhận hóa đơn",
  "Mã số bí mật","Mã bảo mật","Số bảo mật","QuanLy_SoBaoMat",
  "Mã Kiểm tra","KeySearch","SearchKey","Hilo-SearchKey","reservationCode","TransactionId","SecureKey",
  "InvoiceId","InvoiceCode","chungTuLienQuan","Dbo","MNHDon"
@@ -93,6 +93,155 @@ const KEY_TTRUONG = [
 const LINK_TTRUONG = [
  "DLink","ĐCTC","DCTC","DC TC","PortalLink","Website tra cứu HĐ"
 ];
+
+/* ===== TT32 SUPPORT ===== */
+// TT32 lấy text node đầu tiên theo danh sách tag
+function getFirst(xml, tags){
+  for(const t of tags){
+    const el = xml.getElementsByTagName(t)[0];
+    if(el && el.textContent){
+      const v = el.textContent.trim();
+      if(v) return v;
+    }
+  }
+  return "";
+}
+
+// lấy MST và tên người bán ưu tiên trong node người bán
+function getSellerInfoTT32(xml){
+  const sellerSelectors = [
+    "NBan",
+    "Seller",
+    "seller",
+    "inv:Seller"
+  ];
+  const MSTNBan_TT32 = [
+    "MST","NBMST","MaSoThueNguoiBan","ma_thue","MSTTinh","ComTaxCode","sellerTaxCode","inv:sellerTaxCode",
+    "Taxcode","SellerTaxCode","CompanyTaxCode","Tax_File_Number","sellerVATID"  ];
+  const TenNBan_TT32 = [
+    "Ten","TenNguoiBan","don_vi","tenDVi","ComName","sellerLegalName","inv:sellerLegalName","CompanyName","SellerName",
+    "inv:SellerName","CustomerName","Pr_Detail_Name","sellerCompanyName"  ];
+  let result = {
+    tax: "",
+    name: ""
+  };
+
+// ưu tiên lấy trong node người bán
+  for(const s of sellerSelectors){
+    const node = xml.getElementsByTagName(s)[0];
+    if(node){
+      // ===== MST NGƯỜI BÁN =====
+      if(!result.tax){
+        result.tax = getFirst(node.ownerDocument || xml, MSTNBan_TT32);
+      }
+      // ===== TÊN NGƯỜI BÁN =====
+      if(!result.name){
+        result.name = getFirst(node.ownerDocument || xml, TenNBan_TT32);
+      }
+    }
+    if(result.tax && result.name) break;
+  }
+// fallback toàn file nếu thiếu
+  if(!result.tax){
+    result.tax = getFirst(xml, MSTNBan_TT32);
+  }
+  if(!result.name){
+    result.name = getFirst(xml, TenNBan_TT32);
+  }
+  return result;
+}
+
+function getCDATA(xml, tagName) {
+  const nodes = xml.getElementsByTagName("inv:userDefines");
+  if (!nodes.length) return "";
+
+  const text = nodes[0].textContent || "";
+
+  const match = text.match(
+    new RegExp(`<${tagName}>\\s*([^<]+)\\s*<\\/${tagName}>`, "i")
+  );
+
+  return match ? match[1].trim() : "";
+}
+
+function detectProviderByContent(xml, rawText){
+
+  const g = t =>
+    xml.getElementsByTagName(t)[0]?.textContent?.trim() || "";
+
+  const systemCode = g("inv:systemCode") || g("systemCode");
+
+  if(systemCode === "LHD_MISA"){ // MISA
+    return "0101243150";
+  }
+
+  if(g("chungTuLienQuan") || g("ChungTuLienQuan")){ // TGDD
+    return "0306731335";
+  }
+
+  if(systemCode === "LHD_EFY"){ // EFY
+    return "0102519041";
+  }
+
+  if(g("inv:invoiceAppRecordId") || g("inv:invoiceAppRecordID")){ // BKAV
+    return "0101360697";
+  }
+
+  const txt = rawText.toLowerCase();
+
+  if(txt.includes("meinvoice.vn")){ // MISA
+   return "0101243150";
+  }
+
+  if(txt.includes("ehoadon.vn")){ // BKAV
+   return "0101360697";
+  }
+
+  if(txt.includes("vnpt-invoice.com.vn")){ // VNPT
+    return "0100684378";
+  }
+
+  if(txt.includes("sinvoice.viettel.vn") ||txt.includes("vinvoice.viettel.vn")){ // Viettel
+   return "0100109106";
+  }
+
+  if(txt.includes("einvoice.fast.com.vn")){ // FAST
+   return "0100727825";
+  }
+
+  if(txt.includes("easyinvoice.vn")){ // EASY
+    return "0105987432";
+  }
+
+  if(txt.includes("einvoice.vn") ||txt.includes("einvoice.com.vn")){ // THÁI SƠN
+    return "0101300842";
+  }
+
+  if(txt.includes("ihoadon.vn")){ EFY
+   return "0102519041";
+  }
+
+  if(txt.includes("xuathoadon.vn")){ // TS24
+   return "0309478306";
+  }
+
+  if(txt.includes("minvoice.com.vn")){ // Minvoice
+   return "0106026495";
+  }
+
+  if(txt.includes("cinvoice.vn")){ // CMC
+   return "0101925883";
+  }
+
+  if(txt.includes("smartvas.vn")){ // SMARTSIGN
+    return "0309612872";
+  }
+
+  return "";
+}
+
+/* ===== END TT32 SUPPORT ===== */
+
 
 document.getElementById("xmlFiles").addEventListener("change",e=>{
  document.getElementById("result").innerHTML="";
@@ -108,18 +257,49 @@ function parseXML(txt,name){
  const g=t=>xml.getElementsByTagName(t)[0]?.textContent.trim()||"";
  const c=(p,t)=>p?.getElementsByTagName(t)[0]?.textContent.trim()||"";
 
- const KHMSHDon=g("KHMSHDon"),KHHDon=g("KHHDon"),SHDon=g("SHDon");
- const SHDonV=SHDon.replace(/^0+/,"");
- const NLap=g("NLap"),MHSo=g("MHSo");
+ const KHMSHDon_TT78=g("KHMSHDon"),KHHDon_TT78=g("KHHDon"),SHDon_TT78=g("SHDon");
+ // const SHDonV=SHDon_TT78.replace(/^0+/,"");
+ const NLap_TT78=g("NLap"),MHSo=g("MHSo");
  const MCCQT=g("MCCQT"),MTDTChieu=g("MTDTChieu"),TgTTTBSo=g("TgTTTBSo");
+ 
+ /* ===== TT32 FALLBACK ===== */
+ // nếu TT78 không có thì đọc theo TT32 -> Gán TT32 fallback nếu TT78 rỗng
+ const KHMSHDon_TT32 = getFirst(xml,["KHMSHDon","MSHDon","MauSo","mau_sovat","mauHDon","InvoicePattern","templateCode",
+ "inv:templateCode","TemptCode","InvoiceForm","Prints_Id"]);
+ const KHHDon_TT32 = getFirst(xml,["KHHDon","Kyhieu","seri_vat","kyHieuHDon","SerialNo","invoiceSeries","inv:invoiceSeries",
+ "Symbol", "InvoiceSerial","Vat_Tran_Serie" ]);
+ const SHDon_TT32 = getFirst(xml,["SHDon","SoHoaDon","so_hoadon","soHDon","InvoiceNo","invoiceNo","invoiceNumber","InvoiceNumber",
+ "inv:invoiceNumber","Vat_Tran_No" ]);
+ const NLap_TT32 = getFirst(xml,["TDLap","NgayHoaDon","ngay_hdon","ngayHDon","ArisingDate","invoiceDate","invoiceIssuedDate",
+ "inv:invoiceIssuedDate","DateofInvoice","InvoiceDate","Vat_Tran_Date"]);
+
+ const KHMSHDon  = KHMSHDon_TT78 || KHMSHDon_TT32;
+ const KHMSHDonV = KHMSHDon.replace(/\//g, "");
+ const KHHDon    = KHHDon_TT78   || KHHDon_TT32;
+ const KHHDonV   = KHHDon.replace(/\//g, "");
+ const SHDon     = SHDon_TT78    || SHDon_TT32;
+ const SHDonV    = SHDon.replace(/^0+/,"");
+ const NLap      = NLap_TT78     || NLap_TT32;
+ /* ===== END TT32 FALLBACK ===== */
+
  let MSTTCGP = g("MSTTCGP");
- // Hóa đơn không có thẻ MSTTCGP thì đưa vào nhóm VNPT
- if (!MSTTCGP) {
+ if(!MSTTCGP){
+  MSTTCGP = detectProviderByContent(xml, txt);
+ }
+
+ if (!MSTTCGP) { // Hóa đơn không có thẻ MSTTCGP thì đưa vào nhóm VNPT
   MSTTCGP = "VNPT_BACK";
  }
 
  const NBan=xml.querySelector("NDHDon > NBan");
- const TenNBan=c(NBan,"Ten"),MSTNBan=c(NBan,"MST");
+ const TenNBan_TT78=c(NBan,"Ten"),MSTNBan_TT78=c(NBan,"MST");
+
+/* ===== TT32 MST FALLBACK ===== */
+ const sellerInfo = getSellerInfoTT32(xml);
+ const TenNBan = TenNBan_TT78 || sellerInfo.name; 
+ const MSTNBan = MSTNBan_TT78 || sellerInfo.tax;
+/* ===== END TT32 MST FALLBACK ===== */
+
  const TenNBanGoiNho = (typeof TENNBANGOINHO!=="undefined" && TENNBANGOINHO[MSTNBan])
  
  ? TENNBANGOINHO[MSTNBan]
@@ -148,16 +328,26 @@ function parseXML(txt,name){
 
  const DigestValue=xml.getElementsByTagName("DigestValue")[0]?.textContent.trim()||"";
 
- const formatDate = d=>{
-  if(!d) return "";
-   const y=d.slice(0,4);
-   const m=d.slice(5,7);
-   const day=d.slice(8,10);
- return `${y}-${m}-${day}`;
-  
+ const formatDate = d => {
+  if (!d) return "";
+  const dt = new Date(d.includes("/") ? d.split("/").reverse().join("-") : d);
+  if (isNaN(dt)) return d;
+  const y = dt.getFullYear();
+  const m = String(dt.getMonth()+1).padStart(2,"0");
+  const day = String(dt.getDate()).padStart(2,"0");
+  return `${y}-${m}-${day}`;
+
 };
 
- let MaTCHdon=g("MaTC")||g("Fkey");
+ let MaTCHdon=g("MaTC")||g("Fkey")||getCDATA(xml, "TransactionID");
+
+ if (!MaTCHdon) { // fallback TT32 nếu TT78 không có kết quả
+    MaTCHdon = getFirst(xml, ["sobaomat","SoBaoMat","SOBAOMAT", "invoice_id","InvoiceId","InvoiceID",
+    "Key","key", "publicCode","PublicCode", "TransactionID","TransactionId","transactionId",
+    "InvoiceCode","Invoicecode","invoiceCode","chungTuLienQuan","inv:invoiceAppRecordId"
+    ]);
+ }
+
  let LinkTCHdon=g("Link")||g("LinkTC");
 
  xml.querySelectorAll("TTin").forEach(t=>{
@@ -171,14 +361,14 @@ function parseXML(txt,name){
  const add=l=>links.push(l);
 
 if (MSTTCGP === "0101243150") { // Misa
-  add(`- Mã tra cứu: ${IDHDon1}`);add(`<br>`);
-  add(`- `);add(`https://www.meinvoice.vn/tra-cuu/?sc=${IDHDon1}`);add(`<br>`);
-  add(`- `);add(`https://www.meinvoice.vn/tra-cuu/DownloadHandler.ashx?Type=pdf&Code=${IDHDon1}`);add(`<br>`);
-  add(`- `);add(`https://www.meinvoice.vn/tra-cuu/DownloadHandler.ashx?Type=xml&Code=${IDHDon1}`);add(`<br>`);
+  add(`- Mã tra cứu: ${IDHDon1 || MaTCHdon}`);add(`<br>`);
+  add(`- `);add(`https://www.meinvoice.vn/tra-cuu/?sc=${IDHDon1 || MaTCHdon}`);add(`<br>`);
+  add(`- `);add(`https://www.meinvoice.vn/tra-cuu/DownloadHandler.ashx?Type=pdf&Code=${IDHDon1 || MaTCHdon}`);add(`<br>`);
+  add(`- `);add(`https://www.meinvoice.vn/tra-cuu/DownloadHandler.ashx?Type=xml&Code=${IDHDon1 || MaTCHdon}`);add(`<br>`);
 } 
 
 else if (MSTTCGP === "0101360697") { // BKAV
-  add(`- `);add(`https://van.ehoadon.vn/Lookup?InvoiceGUID=${IDHDon1}`);add(`<br>`);
+  add(`- `);add(`https://van.ehoadon.vn/Lookup?InvoiceGUID=${IDHDon1 || MaTCHdon}`);add(`<br>`);
 } 
 
 else if (MSTTCGP === "VNPT_BACK" ||["0100684378","0108212803"].includes(MSTTCGP)) { // VNPT
@@ -192,8 +382,8 @@ else if (MSTTCGP === "VNPT_BACK" ||["0100684378","0108212803"].includes(MSTTCGP)
     const sub = (typeof VNPT_SUBDOMAIN !== "undefined" && VNPT_SUBDOMAIN[MSTNBan])
       ? VNPT_SUBDOMAIN[MSTNBan]
       : MSTNBan;
-    add(`- Mã tra cứu: ${MCCQT}`);add(`<br>`);
-    add(`- `);add(`https://${sub}-tt78.vnpt-invoice.com.vn?strFkey=${MCCQT}`);add(`<br>`);
+    add(`- Mã tra cứu: ${MaTCHdon || MCCQT}`);add(`<br>`);
+    add(`- `);add(`https://${sub}-tt78.vnpt-invoice.com.vn?strFkey=${MCCQT|| MaTCHdon}`);add(`<br>`);
   }
 } 
 
@@ -209,8 +399,8 @@ else if(MSTTCGP==="0100686209") { // Mobi
 else if(MSTTCGP==="0101300842") { // Thái Sơn
   add(`- Mã tra cứu: ${MaTCHdon}`);add(`<br>`);
   add(`- `);add(`https://einvoice.vn/tra-cuu?MaDV=${MSTNBan}&MaNhanHoaDon=${MaTCHdon}`);add(`<br>`);
-  add(`- `);add(`https://tracuutvan.einvoice.com.vn/?MaDV=${MSTNBan}&MaNhanHoaDon=${MaTCHdon}`);add(`<br>`);
-  add(`- `);add(`${LinkTCHdon}/?MaDV=${MSTNBan}&MaNhanHoaDon=${MaTCHdon}`);add(`<br>`);
+  add(`- `);add(`https://tracuutvan.einvoice.com.vn/?MaDV=${MSTNBan}&matracuu=${MaTCHdon}`);add(`<br>`);
+  add(`- `);add(`${LinkTCHdon}/?MaDV=${MSTNBan}&matracuu=${MaTCHdon}`);add(`<br>`);
   }
 
 else if(MSTTCGP==="0105987432") { // Easy
@@ -242,9 +432,11 @@ else if(MSTTCGP==="0105232093") { // Cyber
   add(`- Mã tra cứu: ${IDHDon2}`);add(`<br>`);
   add(`- `);add(`http://tracuu.cyberbill.vn/#/tracuuhoadon/thongtinchung?mstdoanhnghiep=${MSTNBan}&masobimat=${IDHDon2}&loaitracuu=1`);add(`<br>`);
   add(`- `);add(`http://tracuuhoadon.cyberbill.vn/#/tracuuhoadon/thongtinchung?mstdoanhnghiep=${MSTNBan}&masobimat=${IDHDon2}&loaitracuu=1`);add(`<br>`);
+  add(`- `);add(`http://tracuu.lienson.vn/#/tracuuhoadon/thongtinchung?mstdoanhnghiep=${MSTNBan}&masobimat=${IDHDon2}&loaitracuu=1`);add(`<br>`);
+  add(`- `);add(`http://tracuu.hoadondientuvn.info/#/tracuuhoadon/thongtinchung?mstdoanhnghiep=${MSTNBan}&masobimat=${IDHDon2}&loaitracuu=1`);add(`<br>`);
   }
 
-else if(["0314743623","0314209362"].includes(MSTTCGP)) { // Vĩnh Hy
+else if(["0314743623","0314209362"].includes(MSTTCGP)) { // Vĩnh Hy, Minh khang
   add(`- Mã tra cứu: xem file pdf`);add(`<br>`);
   add(`- `);add(`https://ehoadondientu.com/Account/GenerateFile.aspx?r=ct_${IDHDon4}&type=pdf`);add(`<br>`);
   add(`- `);add(`https://hoadondientuvat.com/Account/GenerateFile.aspx?r=ct_${IDHDon4}&type=pdf`);add(`<br>`);
@@ -294,6 +486,7 @@ else if(MSTTCGP==="0310768095") { // AVSE
 else if(MSTTCGP==="0309612872") { // Smartsign
   add(`- Mã tra cứu: ${MaTCHdon}`);add(`<br>`);
   add(`- `);add(`https://tracuuhd.smartsign.com.vn/HDDT/?code=${MaTCHdon}`);add(`<br>`);
+  add(`- `);add(`https://tracuu.smartvas.vn/NEWHDDT/?code=${MaTCHdon}`);add(`<br>`);
   }
 
 else if(MSTTCGP==="0309478306") { // TS24
@@ -482,6 +675,10 @@ else if(MSTTCGP==="0106777621") { // NDTV
   add(`- `);add(`https://hoadontvan.com/TraCuu?invoiceCode=${MaTCHdon}`);add(`<br>`);
   }
 
+if (MSTTCGP === "0103243195") { // Sapo
+  add(`- Mã tra cứu: ${IDHDon1}`);add(`<br>`);
+  add(`- `);add(`https://www.sapo.vn/tra-cuu-sapo-invoice.html?reference_code=${IDHDon1}`);add(`<br>`);
+} 
 
  let html=`<div class="block"><b>File:</b> ${name}<br><br>
 Mẫu số - ký kiệu: ${KHMSHDon} - ${KHHDon}<br>
@@ -508,7 +705,7 @@ Mã CQT: ${MCCQT}<br><br>
   html+=`<br>Không tồn tại mã tra cứu trong file XML`;
  }
 
- html+=`<br>Tên file: <span class="file-name">${formatDate(NLap)} ${MSTNBan} ${KHMSHDon} ${KHHDon} ${SHDonV} ${TenNBanGoiNho}</span>
+ html+=`<br>Tên file: <span class="file-name">${formatDate(NLap)} ${MSTNBan} ${KHMSHDonV} ${KHHDonV} ${SHDonV} ${TenNBanGoiNho}</span>
   <button class="copy-btn" onclick="copyText(this)">Copy</button>`;
  html+=`</div>`;
  document.getElementById("result").innerHTML+=html;
@@ -527,7 +724,7 @@ document.addEventListener("click", e=>{
     navigator.clipboard.writeText(e.target.innerText);
   }
 });
-    
+   
 
 /* ===DASHBOARD TAB ACTIVE=== */
 (function(){
