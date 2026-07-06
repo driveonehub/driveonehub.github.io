@@ -308,11 +308,12 @@ function parseXML(txt,name){
  const MSTNBan = MSTNBan_TT78 || sellerInfo.tax;
 /* ===== END TT32 MST FALLBACK ===== */
 
- const TenNBanGoiNho = (typeof TENNBANGOINHO!=="undefined" && TENNBANGOINHO[MSTNBan])
- 
+ const TenNBanGoiNho = ((typeof TENNBANGOINHO!=="undefined" && TENNBANGOINHO[MSTNBan])
  ? TENNBANGOINHO[MSTNBan]
- 
- : TenNBan;
+ : TenNBan)
+  .replace(/\b(công ty|cổ phần|tnhh|một thành viên|mtv|hộ kinh doanh)\b/gi, "")
+  .replace(/\s+/g, " ")
+  .trim();
 
  const NMua=xml.querySelector("NDHDon > NMua");
  const TenNMua=c(NMua,"Ten"),MSTNMua=c(NMua,"MST");
