@@ -233,8 +233,12 @@ function detectProviderByContent(xml, rawText){
    return "0100727825";
   }
 
-  if(txt.includes("ihoadon.vn")){ EFY
+  if(txt.includes("ihoadon.vn")){ // EFY
    return "0102519041";
+  }
+
+  if(txt.includes("hilo-searchkey")){ // Hilo
+   return "0106713804";
   }
 
   if(txt.includes("cinvoice.vn")){ // CMC
@@ -585,8 +589,18 @@ else if(MSTTCGP==="0315638251") { // HT
   }
 
 else if(MSTTCGP==="0106713804") { // Hilo
+  if (MSTNBan.startsWith("0110269067")) {
+    add(`- Mã tra cứu: ${MaTCHdon}`); add(`<br>`);
+    add(`- `);add(`https://gsm-einvoice.hilo.com.vn/?Madv=${MSTNBan}&key=${MaTCHdon}`); add(`<br>`);
+  }
+  else if (MSTNBan === "0313506115") {
+    add(`- Mã tra cứu: ${MaTCHdon}`); add(`<br>`);
+    add(`- `);add(`https://hoadon.ahamove.com/Invoice/Search?taxcode=${MSTNBan}&key=${MaTCHdon}`); add(`<br>`);
+  }
+  else {
   add(`- Mã tra cứu: ${MaTCHdon}`);add(`<br>`);
   add(`- `);add(`https://tracuuhddt78.hilo.com.vn/Invoice/Search?taxcode=${MSTNBan}&key=${MaTCHdon}`);add(`<br>`);
+  }
   }
 
 else if(MSTTCGP==="0312662961") { // Haravan
