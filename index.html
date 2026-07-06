@@ -175,16 +175,20 @@ function detectProviderByContent(xml, rawText){
     return "0101243150";
   }
 
-  if(g("chungTuLienQuan") || g("ChungTuLienQuan")){ // TGDD
-    return "0306731335";
-  }
-
   if(systemCode === "LHD_EFY"){ // EFY
     return "0102519041";
   }
 
   if(g("inv:invoiceAppRecordId") || g("inv:invoiceAppRecordID")){ // BKAV
     return "0101360697";
+  }
+
+  if(g("chungTuLienQuan") || g("ChungTuLienQuan")){ // TGDD
+    return "0306731335";
+  }
+
+  if(g("Hilo-SearchKey") || g("Hilo-Searchkey")){ // Hilo
+    return "0106713804";
   }
 
   const txt = rawText.toLowerCase();
@@ -205,36 +209,36 @@ function detectProviderByContent(xml, rawText){
    return "0100109106";
   }
 
-  if(txt.includes("einvoice.fast.com.vn")){ // FAST
-   return "0100727825";
+  if(txt.includes("einvoice.vn") ||txt.includes("einvoice.com.vn")){ // THÁI SƠN
+    return "0101300842";
   }
 
   if(txt.includes("easyinvoice.vn") ||txt.includes("easyinvoice.com.vn")){ // EASY
     return "0105987432";
   }
 
-  if(txt.includes("einvoice.vn") ||txt.includes("einvoice.com.vn")){ // THÁI SƠN
-    return "0101300842";
+  if(txt.includes("minvoice.com.vn")){ // Minvoice
+   return "0106026495";
   }
 
-  if(txt.includes("ihoadon.vn")){ EFY
-   return "0102519041";
+  if(txt.includes("smartvas.vn")){ // SMARTSIGN
+    return "0309612872";
   }
 
   if(txt.includes("xuathoadon.vn")){ // TS24
    return "0309478306";
   }
 
-  if(txt.includes("minvoice.com.vn")){ // Minvoice
-   return "0106026495";
+  if(txt.includes("einvoice.fast.com.vn")){ // FAST
+   return "0100727825";
+  }
+
+  if(txt.includes("ihoadon.vn")){ EFY
+   return "0102519041";
   }
 
   if(txt.includes("cinvoice.vn")){ // CMC
    return "0101925883";
-  }
-
-  if(txt.includes("smartvas.vn")){ // SMARTSIGN
-    return "0309612872";
   }
 
   return "";
@@ -585,6 +589,11 @@ else if(MSTTCGP==="0106713804") { // Hilo
   add(`- `);add(`https://tracuuhddt78.hilo.com.vn/Invoice/Search?taxcode=${MSTNBan}&key=${MaTCHdon}`);add(`<br>`);
   }
 
+else if(MSTTCGP==="0312662961") { // Haravan
+  add(`- Mã tra cứu: ${MaTCHdon}`);add(`<br>`);
+  add(`- `);add(`https://e-invoices.haravan.app/Invoice/Search?taxcode=${MSTNBan}&key=${MaTCHdon}`);add(`<br>`);
+  }
+
 else if(MSTTCGP==="0105844836") { // Mega
   add(`- Mã tra cứu: ${MaTCHdon}`);add(`<br>`);
   add(`- `);add(`https://tracuu.vinvoice.vn/Invoice/SearchTaxInv?key=${MaTCHdon}`);add(`<br>`);
@@ -635,6 +644,7 @@ else if(MSTTCGP==="0102331762") { // VNISC
 else if(MSTTCGP==="0302431595") { // P.A
   add(`- Mã tra cứu: ${MaTCHdon}`);add(`<br>`);
   add(`- `);add(`https://hoadon.pavietnam.vn/?OrderID=${MaTCHdon}`);add(`<br>`);
+  add(`- `);add(`https://tracuu.hoadon30s.vn/?matracuu=${MaTCHdon}`);add(`<br>`);
   }
 
 else if(MSTTCGP==="0315382923") { // SES
