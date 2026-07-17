@@ -504,14 +504,10 @@ else if(MSTTCGP==="0309478306") { // TS24
   add(`- `);add(`https://tracuu.xuathoadon.vn/invoice/1/${MaTCHdon}`);add(`<br>`);
   }
 
-else if(MSTTCGP==="0107500414") { // VETC
+else if(["0107500414","0106858609"].includes(MSTTCGP)) { // VETC
   add(`- Mã tra cứu: ${MaTCHdon}`);add(`<br>`);
   add(`- `);add(`https://tracuuhoadon.vetc.com.vn/p/${MaTCHdon}`);add(`<br>`);
   add(`- `);add(`https://tracuuhoadon.vetc.com.vn/download/${MaTCHdon}`);add(`<br>`);
-  }
-
-else if(MSTTCGP==="0106858609") { // VETC
-  add(`- Mã tra cứu: ${MaTCHdon}`);add(`<br>`);
   add(`- `);add(`https://hoadondientu.vetc.com.vn/p/${MaTCHdon}`);add(`<br>`);
   add(`- `);add(`https://hoadondientu.vetc.com.vn/download/${MaTCHdon}`);add(`<br>`);
   }
