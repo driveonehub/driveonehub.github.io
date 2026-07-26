@@ -51,6 +51,7 @@ const VNPT_SUBDOMAIN = {
 "0700266943":"ktvd",
 "0700266943-001":"vaidiakythuatlongan",
 "1100635527":"thepvietthanhlongan",
+"1100869003":"hddttnhhmtvtmdt",
 "1100977129":"ctcphiepphat",
 "1200253539":"ctyxdchauthanh",
 "1201617926":"ctylxphuanhtgg",
@@ -74,6 +75,7 @@ const VNPT_SUBDOMAIN = {
 "4200541691":"bxlouisiane",
 "4201601110-005":"suntaxibdh",
 "4201631958":"kngroup",
+"5800075878":"dothidalat",
 "6300147879-002":"dangkiem9502d",
 "44182003458":"8066644151",
 "068160004778":"8098094535"
