@@ -191,6 +191,11 @@ function detectProviderByContent(xml, rawText){
     return "0106713804";
   }
 
+  // ===== Detect theo cấu trúc XML (không phụ thuộc xuống dòng) =====
+  // Viettel: chỉ Viettel có block <DLieu>...</DLieu><KDLieu>...</KDLieu><TTruong>Mã số bí mật</TTruong>
+  if (/<DLieu\b[\s\S]*?<\/DLieu>\s*<KDLieu\b[\s\S]*?<\/KDLieu>\s*<TTruong>\s*Mã\s*số\s*bí\s*mật\s*<\/TTruong>/i.test(rawText))
+    return "0100109106";
+
   const txt = rawText.toLowerCase();
 
   if(txt.includes("meinvoice.vn")){ // MISA
