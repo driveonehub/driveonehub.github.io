@@ -84,14 +84,14 @@ a:hover{color:#003366}
 
 <script>
 const KEY_TTRUONG = [
- "Fkey","MTCuu","MTCHDon","Mã TC","Mã tra cứu","Mã tra cứu HĐ","Mã tra cứu hóa đơn","Mã nhận hóa đơn",
+ "Fkey","Matracuu","MTCuu","MTCHDon","Mã TC","Mã tra cứu","Mã tra cứu HĐ","Mã tra cứu hóa đơn","Mã nhận hóa đơn",
  "Mã số bí mật","Mã bảo mật","Số bảo mật","QuanLy_SoBaoMat",
  "Mã Kiểm tra","KeySearch","SearchKey","Hilo-SearchKey","reservationCode","TransactionId","SecureKey",
  "InvoiceId","InvoiceCode","chungTuLienQuan","Dbo","MNHDon"
 ];
 
 const LINK_TTRUONG = [
- "DLink","ĐCTC","DCTC","DC TC","PortalLink","Website tra cứu HĐ","Đường dẫn tra cứu","Link tra cứu"
+ "DLink","ĐCTC","DCTC","DC TC","PortalLink","Website tra cứu HĐ","Đường dẫn tra cứu","Link tra cứu","Trangtracuu"
 ];
 
 /* ===== TT32 SUPPORT ===== */
@@ -441,6 +441,7 @@ else if(["0311622035","0315194912","0303211948","0315191291","0316642395"].inclu
 else if(["0306731335","0314420012"].includes(MSTTCGP)) { // TGDD
   add(`- Mã tra cứu: ${MaTCHdon}`);add(`<br>`);
   add(`- `);add(`https://hddt.thegioididong.com/?billNum=${SHDonV}&phone=${MaTCHdon}`);add(`<br>`);
+  add(`- `);add(`https://hddt.bachhoaxanh.com/?billNum=${SHDonV}&phone=${MaTCHdon}`);add(`<br>`);
   }
 
 else if(MSTTCGP==="0105232093") { // Cyber
@@ -502,6 +503,7 @@ else if(MSTTCGP==="0309612872") { // Smartsign
   add(`- Mã tra cứu: ${MaTCHdon}`);add(`<br>`);
   add(`- `);add(`https://tracuuhd.smartsign.com.vn/HDDT/?code=${MaTCHdon}`);add(`<br>`);
   add(`- `);add(`https://tracuu.smartvas.vn/NEWHDDT/?code=${MaTCHdon}`);add(`<br>`);
+  add(`- `);add(`{LinkTCHdon}/NEWHDDT/?code=${MaTCHdon}`);add(`<br>`);
   }
 
 else if(MSTTCGP==="0309478306") { // TS24
