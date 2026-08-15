@@ -295,7 +295,7 @@ function parseXML(txt,name){
  const NLap      = NLap_TT78     || NLap_TT32;
  /* ===== END TT32 FALLBACK ===== */
 
- let MSTTCGP = g("MSTTCGP");
+ let MSTTCGP = g("MSTTCGP") || g("MSTDVCCHDDTu");
  if(!MSTTCGP){
   MSTTCGP = detectProviderByContent(xml, txt);
  }
