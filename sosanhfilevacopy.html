@@ -1,0 +1,3498 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>So sánh & Đồng bộ 2 thư mục</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:20px;
+    font-family:Tahoma,Arial,sans-serif;
+    font-size:14px;
+    color:#222;
+    background:#f4f6f8;
+}
+
+.container{
+    max-width:1600px;
+    margin:auto;
+}
+
+h1{
+    margin:0 0 18px;
+    font-size:24px;
+}
+
+h2{
+    margin:0 0 15px;
+    font-size:18px;
+}
+
+.panel{
+    background:#fff;
+    border:1px solid #d9dde2;
+    border-radius:8px;
+    padding:18px;
+    margin-bottom:15px;
+    box-shadow:0 1px 2px rgba(0,0,0,.04);
+}
+
+.folder-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.folder-box{
+    border:1px solid #d8d8d8;
+    border-radius:7px;
+    padding:15px;
+    background:#fafafa;
+}
+
+.folder-title{
+    font-size:17px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.folder-name{
+    margin-top:10px;
+    padding:10px;
+    border-radius:5px;
+    background:#fff;
+    border:1px solid #ddd;
+    word-break:break-all;
+}
+
+button{
+    border:0;
+    border-radius:5px;
+    padding:10px 15px;
+    font-size:14px;
+    cursor:pointer;
+    margin:0 6px 6px 0;
+}
+
+button:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+}
+
+.btn-folder{
+    background:#1976d2;
+    color:#fff;
+}
+
+.btn-start{
+    background:#1565c0;
+    color:#fff;
+}
+
+.btn-stop{
+    background:#c62828;
+    color:#fff;
+}
+
+.btn-sync1{
+    background:#2e7d32;
+    color:#fff;
+}
+
+.btn-sync2{
+    background:#6a1b9a;
+    color:#fff;
+}
+
+.btn-export{
+    background:#455a64;
+    color:#fff;
+}
+
+.btn-clear{
+    background:#757575;
+    color:#fff;
+}
+
+.status{
+    margin-top:10px;
+    padding:11px;
+    min-height:42px;
+    border-radius:5px;
+    background:#f1f3f4;
+    border:1px solid #ddd;
+}
+
+.progress{
+    width:100%;
+    height:25px;
+    margin-top:10px;
+    background:#ddd;
+    border-radius:13px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    width:0%;
+    height:100%;
+    line-height:25px;
+    text-align:center;
+    color:#fff;
+    background:#1976d2;
+    font-size:12px;
+    transition:width .1s;
+}
+
+.options{
+    display:flex;
+    flex-wrap:wrap;
+    gap:18px;
+    margin-top:10px;
+}
+
+.options label{
+    cursor:pointer;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:10px;
+}
+
+.stat{
+    border:1px solid #ddd;
+    border-radius:6px;
+    padding:12px;
+    background:#fafafa;
+}
+
+.stat-title{
+    font-size:12px;
+    color:#666;
+}
+
+.stat-value{
+    margin-top:4px;
+    font-size:21px;
+    font-weight:bold;
+}
+
+.same{
+    background:#e8f5e9;
+}
+
+.different{
+    background:#ffebee;
+}
+
+.only1{
+    background:#fff3e0;
+}
+
+.only2{
+    background:#e3f2fd;
+}
+
+.copied{
+    background:#e8f5e9;
+}
+
+.skipped{
+    background:#fff8e1;
+}
+
+.failed{
+    background:#ffebee;
+}
+
+.table-wrap{
+    max-height:650px;
+    overflow:auto;
+    border:1px solid #ddd;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:#fff;
+}
+
+th,
+td{
+    padding:7px 9px;
+    border-bottom:1px solid #ddd;
+    text-align:left;
+    white-space:nowrap;
+}
+
+th{
+    position:sticky;
+    top:0;
+    z-index:2;
+    background:#eceff1;
+}
+
+.path{
+    max-width:700px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.small{
+    font-size:12px;
+    color:#666;
+}
+
+.controls{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:8px;
+}
+
+select{
+    padding:9px;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+.log{
+    height:250px;
+    overflow:auto;
+    padding:10px;
+    background:#101820;
+    color:#d8f3dc;
+    border-radius:5px;
+    font-family:Consolas,monospace;
+    font-size:12px;
+    white-space:pre-wrap;
+}
+
+.warning{
+    margin-top:12px;
+    padding:12px;
+    background:#fff8e1;
+    border:1px solid #ffe082;
+    border-radius:5px;
+}
+
+.success{
+    color:#2e7d32;
+    font-weight:bold;
+}
+
+.error{
+    color:#c62828;
+    font-weight:bold;
+}
+
+@media(max-width:900px){
+
+    .folder-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+</style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+<h1>So sánh & Đồng bộ 2 thư mục</h1>
+
+
+<!-- =====================================================
+     CHỌN THƯ MỤC
+===================================================== -->
+
+<div class="panel">
+
+<h2>1. Chọn thư mục</h2>
+
+<div class="folder-grid">
+
+    <div class="folder-box">
+
+        <div class="folder-title">
+            📁 Folder 1
+        </div>
+
+        <button
+            class="btn-folder"
+            id="choose1Btn"
+            onclick="chooseFolder(1)"
+        >
+            Chọn Folder 1
+        </button>
+
+        <div
+            class="folder-name"
+            id="folder1Name"
+        >
+            Chưa chọn
+        </div>
+
+        <div
+            class="small"
+            id="folder1Count"
+        >
+            0 file
+        </div>
+
+    </div>
+
+
+    <div class="folder-box">
+
+        <div class="folder-title">
+            📁 Folder 2
+        </div>
+
+        <button
+            class="btn-folder"
+            id="choose2Btn"
+            onclick="chooseFolder(2)"
+        >
+            Chọn Folder 2
+        </button>
+
+        <div
+            class="folder-name"
+            id="folder2Name"
+        >
+            Chưa chọn
+        </div>
+
+        <div
+            class="small"
+            id="folder2Count"
+        >
+            0 file
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="warning">
+
+<b>Lưu ý:</b>
+Chương trình cần quyền đọc/ghi thư mục.
+File được xử lý trực tiếp trên máy tính,
+không upload lên Internet.
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     ĐIỀU KHIỂN
+===================================================== -->
+
+<div class="panel">
+
+<h2>2. So sánh</h2>
+
+<button
+    class="btn-start"
+    id="compareBtn"
+    onclick="startCompare()"
+    disabled
+>
+    🔍 Bắt đầu so sánh
+</button>
+
+<button
+    class="btn-stop"
+    id="stopBtn"
+    onclick="stopOperation()"
+    disabled
+>
+    ⛔ Dừng
+</button>
+
+<button
+    class="btn-export"
+    id="exportBtn"
+    onclick="exportCSV()"
+    disabled
+>
+    📊 Xuất CSV
+</button>
+
+<button
+    class="btn-clear"
+    onclick="clearAll()"
+>
+    🗑 Xóa
+</button>
+
+
+<div class="status" id="status">
+    Vui lòng chọn 2 thư mục.
+</div>
+
+
+<div class="progress">
+
+    <div
+        class="progress-bar"
+        id="progressBar"
+    >
+        0%
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     TÙY CHỌN ĐỒNG BỘ
+===================================================== -->
+
+<div class="panel">
+
+<h2>3. Tùy chọn đồng bộ</h2>
+
+<div class="options">
+
+<label>
+<input
+    type="checkbox"
+    id="copyOnlyMissing"
+    checked
+>
+Chỉ copy file chưa có
+</label>
+
+
+<label>
+<input
+    type="checkbox"
+    id="overwriteDifferent"
+>
+Ghi đè file khác nội dung
+</label>
+
+
+<label>
+<input
+    type="checkbox"
+    id="createFolders"
+    checked
+>
+Tự tạo thư mục con
+</label>
+
+</div>
+
+
+<br>
+
+
+<div>
+
+<button
+    class="btn-sync1"
+    id="sync1Btn"
+    onclick="syncFolders(1,2)"
+    disabled
+>
+    ➜ Folder 1 → Folder 2
+</button>
+
+
+<button
+    class="btn-sync2"
+    id="sync2Btn"
+    onclick="syncFolders(2,1)"
+    disabled
+>
+    ← Folder 2 → Folder 1
+</button>
+
+</div>
+
+
+<div class="warning">
+
+<b>An toàn:</b>
+
+Mặc định chương trình chỉ copy những file
+chưa tồn tại ở thư mục đích.
+
+File đang tồn tại nhưng khác nội dung
+sẽ <b>không bị ghi đè</b> nếu chưa tích
+" Ghi đè file khác nội dung ".
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     THỐNG KÊ
+===================================================== -->
+
+<div class="panel">
+
+<h2>4. Thống kê</h2>
+
+<div class="stats">
+
+<div class="stat">
+<div class="stat-title">
+Folder 1
+</div>
+<div
+class="stat-value"
+id="stat1"
+>
+0
+</div>
+</div>
+
+
+<div class="stat">
+<div class="stat-title">
+Folder 2
+</div>
+<div
+class="stat-value"
+id="stat2"
+>
+0
+</div>
+</div>
+
+
+<div class="stat">
+<div class="stat-title">
+Có ở cả hai
+</div>
+<div
+class="stat-value"
+id="statBoth"
+>
+0
+</div>
+</div>
+
+
+<div class="stat">
+<div class="stat-title">
+Giống hoàn toàn
+</div>
+<div
+class="stat-value"
+id="statSame"
+>
+0
+</div>
+</div>
+
+
+<div class="stat">
+<div class="stat-title">
+Khác nội dung
+</div>
+<div
+class="stat-value"
+id="statDifferent"
+>
+0
+</div>
+</div>
+
+
+<div class="stat">
+<div class="stat-title">
+Chỉ Folder 1
+</div>
+<div
+class="stat-value"
+id="statOnly1"
+>
+0
+</div>
+</div>
+
+
+<div class="stat">
+<div class="stat-title">
+Chỉ Folder 2
+</div>
+<div
+class="stat-value"
+id="statOnly2"
+>
+0
+</div>
+</div>
+
+
+<div class="stat">
+<div class="stat-title">
+Đã copy
+</div>
+<div
+class="stat-value"
+id="statCopied"
+>
+0
+</div>
+</div>
+
+
+<div class="stat">
+<div class="stat-title">
+Bỏ qua
+</div>
+<div
+class="stat-value"
+id="statSkipped"
+>
+0
+</div>
+</div>
+
+
+<div class="stat">
+<div class="stat-title">
+Lỗi
+</div>
+<div
+class="stat-value"
+id="statFailed"
+>
+0
+</div>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     KẾT QUẢ
+===================================================== -->
+
+<div class="panel">
+
+<h2>5. Kết quả so sánh</h2>
+
+<div class="controls">
+
+<label>
+Hiển thị:
+</label>
+
+<select
+id="filter"
+onchange="renderResults()"
+>
+
+<option value="ALL">
+Tất cả
+</option>
+
+<option value="SAME">
+Giống
+</option>
+
+<option value="DIFFERENT">
+Khác nội dung
+</option>
+
+<option value="ONLY1">
+Chỉ Folder 1
+</option>
+
+<option value="ONLY2">
+Chỉ Folder 2
+</option>
+
+</select>
+
+
+<span
+class="small"
+id="displayInfo"
+></span>
+
+</div>
+
+<br>
+
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>
+STT
+</th>
+
+<th>
+Đường dẫn tương đối
+</th>
+
+<th>
+Folder 1
+</th>
+
+<th>
+Folder 2
+</th>
+
+<th>
+Size 1
+</th>
+
+<th>
+Size 2
+</th>
+
+<th>
+SHA-256 1
+</th>
+
+<th>
+SHA-256 2
+</th>
+
+<th>
+Kết quả
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="resultBody">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     NHẬT KÝ
+===================================================== -->
+
+<div class="panel">
+
+<h2>6. Nhật ký</h2>
+
+<div
+class="log"
+id="log"
+></div>
+
+</div>
+
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   BIẾN TOÀN CỤC
+===================================================== */
+
+let folder1Handle = null;
+let folder2Handle = null;
+
+let results = [];
+
+let stopped = false;
+
+let running = false;
+
+let hashCount = 0;
+
+let copiedCount = 0;
+let skippedCount = 0;
+let failedCount = 0;
+
+
+/* =====================================================
+   KIỂM TRA API
+===================================================== */
+
+if(
+    !("showDirectoryPicker" in window)
+){
+
+    setStatus(
+        "Trình duyệt không hỗ trợ File System Access API. " +
+        "Hãy dùng Chrome hoặc Edge mới."
+    );
+
+}
+
+
+/* =====================================================
+   CHỌN FOLDER
+===================================================== */
+
+async function chooseFolder(number){
+
+    try{
+
+        const handle =
+            await window.showDirectoryPicker({
+                mode:"readwrite"
+            });
+
+
+        /*
+           Xin quyền đọc/ghi
+        */
+
+        const permission =
+            await verifyPermission(
+                handle,
+                true
+            );
+
+
+        if(!permission){
+
+            alert(
+                "Không được cấp quyền đọc/ghi thư mục."
+            );
+
+            return;
+
+        }
+
+
+        if(number === 1){
+
+            folder1Handle = handle;
+
+            document
+            .getElementById(
+                "folder1Name"
+            )
+            .textContent =
+                handle.name;
+
+        }
+        else{
+
+            folder2Handle = handle;
+
+            document
+            .getElementById(
+                "folder2Name"
+            )
+            .textContent =
+                handle.name;
+
+        }
+
+
+        /*
+           Đếm file
+        */
+
+        setStatus(
+            "Đang quét " +
+            handle.name +
+            "..."
+        );
+
+
+        let count = 0;
+
+
+        for await(
+            const item
+            of walkDirectory(
+                handle
+            )
+        ){
+
+            if(
+                item.kind === "file"
+            ){
+
+                count++;
+
+            }
+
+
+            /*
+               Cho trình duyệt có thời gian
+               xử lý giao diện.
+            */
+
+            if(
+                count % 500 === 0
+            ){
+
+                await yieldBrowser();
+
+            }
+
+        }
+
+
+        if(number === 1){
+
+            document
+            .getElementById(
+                "folder1Count"
+            )
+            .textContent =
+                formatNumber(count) +
+                " file";
+
+            document
+            .getElementById(
+                "stat1"
+            )
+            .textContent =
+                formatNumber(count);
+
+        }
+        else{
+
+            document
+            .getElementById(
+                "folder2Count"
+            )
+            .textContent =
+                formatNumber(count) +
+                " file";
+
+            document
+            .getElementById(
+                "stat2"
+            )
+            .textContent =
+                formatNumber(count);
+
+        }
+
+
+        updateButtons();
+
+
+        setStatus(
+            "Đã chọn " +
+            handle.name +
+            " — " +
+            formatNumber(count) +
+            " file."
+        );
+
+
+        log(
+            "Đã chọn Folder " +
+            number +
+            ": " +
+            handle.name +
+            " (" +
+            formatNumber(count) +
+            " file)"
+        );
+
+    }
+    catch(error){
+
+        if(
+            error.name ===
+            "AbortError"
+        ){
+
+            return;
+
+        }
+
+
+        console.error(error);
+
+        setStatus(
+            "Lỗi: " +
+            error.message
+        );
+
+        log(
+            "LỖI chọn thư mục: " +
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   WALK DIRECTORY
+===================================================== */
+
+async function* walkDirectory(
+    directoryHandle,
+    relativePath = ""
+){
+
+    for await(
+        const [
+            name,
+            handle
+        ]
+        of directoryHandle.entries()
+    ){
+
+        const currentPath =
+            relativePath
+            ? relativePath +
+              "/" +
+              name
+            : name;
+
+
+        if(
+            handle.kind ===
+            "file"
+        ){
+
+            yield {
+
+                kind:"file",
+
+                name:name,
+
+                path:currentPath,
+
+                handle:handle
+
+            };
+
+        }
+        else{
+
+            yield {
+
+                kind:"directory",
+
+                name:name,
+
+                path:currentPath,
+
+                handle:handle
+
+            };
+
+
+            yield* walkDirectory(
+                handle,
+                currentPath
+            );
+
+        }
+
+
+        await yieldBrowser();
+
+    }
+
+}
+
+
+/* =====================================================
+   SO SÁNH
+===================================================== */
+
+async function startCompare(){
+
+    if(
+        !folder1Handle ||
+        !folder2Handle
+    ){
+
+        alert(
+            "Vui lòng chọn cả Folder 1 và Folder 2."
+        );
+
+        return;
+
+    }
+
+
+    if(running){
+
+        return;
+
+    }
+
+
+    running = true;
+
+    stopped = false;
+
+    results = [];
+
+    hashCount = 0;
+
+
+    resetSyncStats();
+
+
+    disableDuringOperation();
+
+
+    setStatus(
+        "Đang quét danh sách file..."
+    );
+
+
+    log(
+        "========================================"
+    );
+
+    log(
+        "BẮT ĐẦU SO SÁNH"
+    );
+
+    log(
+        "Folder 1: " +
+        folder1Handle.name
+    );
+
+    log(
+        "Folder 2: " +
+        folder2Handle.name
+    );
+
+
+    /*
+       Đọc file Folder 1
+    */
+
+    const map1 =
+        new Map();
+
+
+    let count1 = 0;
+
+
+    for await(
+        const item
+        of walkDirectory(
+            folder1Handle
+        )
+    ){
+
+        if(stopped){
+
+            finishOperation();
+
+            return;
+
+        }
+
+
+        if(
+            item.kind ===
+            "file"
+        ){
+
+            map1.set(
+                item.path,
+                item
+            );
+
+            count1++;
+
+        }
+
+
+        if(
+            count1 % 500 === 0
+        ){
+
+            setStatus(
+                "Đọc Folder 1: " +
+                formatNumber(count1)
+            );
+
+            await yieldBrowser();
+
+        }
+
+    }
+
+
+    /*
+       Đọc Folder 2
+    */
+
+    const map2 =
+        new Map();
+
+
+    let count2 = 0;
+
+
+    for await(
+        const item
+        of walkDirectory(
+            folder2Handle
+        )
+    ){
+
+        if(stopped){
+
+            finishOperation();
+
+            return;
+
+        }
+
+
+        if(
+            item.kind ===
+            "file"
+        ){
+
+            map2.set(
+                item.path,
+                item
+            );
+
+            count2++;
+
+        }
+
+
+        if(
+            count2 % 500 === 0
+        ){
+
+            setStatus(
+                "Đọc Folder 2: " +
+                formatNumber(count2)
+            );
+
+            await yieldBrowser();
+
+        }
+
+    }
+
+
+    /*
+       Tạo danh sách path
+    */
+
+    const allPaths =
+        new Set([
+            ...map1.keys(),
+            ...map2.keys()
+        ]);
+
+
+    const paths =
+        Array.from(
+            allPaths
+        ).sort();
+
+
+    log(
+        "Tổng đường dẫn cần kiểm tra: " +
+        formatNumber(paths.length)
+    );
+
+
+    /*
+       So sánh
+    */
+
+    for(
+        let i = 0;
+        i < paths.length;
+        i++
+    ){
+
+        if(stopped){
+
+            break;
+
+        }
+
+
+        const path =
+            paths[i];
+
+
+        const f1 =
+            map1.get(path);
+
+
+        const f2 =
+            map2.get(path);
+
+
+        let result;
+
+
+        /*
+           CHỈ FOLDER 1
+        */
+
+        if(
+            f1 &&
+            !f2
+        ){
+
+            result = {
+
+                path:path,
+
+                file1:f1,
+
+                file2:null,
+
+                size1:f1.handle
+                    ? await getFileSize(
+                        f1.handle
+                    )
+                    : 0,
+
+                size2:"",
+
+                hash1:"",
+
+                hash2:"",
+
+                status:"ONLY1",
+
+                text:"Chỉ Folder 1"
+
+            };
+
+        }
+
+
+        /*
+           CHỈ FOLDER 2
+        */
+
+        else if(
+            !f1 &&
+            f2
+        ){
+
+            result = {
+
+                path:path,
+
+                file1:null,
+
+                file2:f2,
+
+                size1:"",
+
+                size2:f2.handle
+                    ? await getFileSize(
+                        f2.handle
+                    )
+                    : 0,
+
+                hash1:"",
+
+                hash2:"",
+
+                status:"ONLY2",
+
+                text:"Chỉ Folder 2"
+
+            };
+
+        }
+
+
+        /*
+           CÓ CẢ HAI
+        */
+
+        else{
+
+            const file1 =
+                await f1.handle.getFile();
+
+            const file2 =
+                await f2.handle.getFile();
+
+
+            const size1 =
+                file1.size;
+
+            const size2 =
+                file2.size;
+
+
+            /*
+               Khác kích thước
+               → không cần hash
+            */
+
+            if(
+                size1 !== size2
+            ){
+
+                result = {
+
+                    path:path,
+
+                    file1:f1,
+
+                    file2:f2,
+
+                    size1:size1,
+
+                    size2:size2,
+
+                    hash1:"",
+
+                    hash2:"",
+
+                    status:"DIFFERENT",
+
+                    text:"KHÁC KÍCH THƯỚC"
+
+                };
+
+            }
+            else{
+
+                /*
+                   Cùng kích thước
+                   → SHA-256
+                */
+
+                setStatus(
+                    "SHA-256 " +
+                    (i + 1) +
+                    "/" +
+                    paths.length +
+                    ": " +
+                    path
+                );
+
+
+                const hash1 =
+                    await sha256File(
+                        file1
+                    );
+
+
+                if(stopped){
+
+                    break;
+
+                }
+
+
+                const hash2 =
+                    await sha256File(
+                        file2
+                    );
+
+
+                hashCount++;
+
+
+                if(
+                    hash1 === hash2
+                ){
+
+                    result = {
+
+                        path:path,
+
+                        file1:f1,
+
+                        file2:f2,
+
+                        size1:size1,
+
+                        size2:size2,
+
+                        hash1:hash1,
+
+                        hash2:hash2,
+
+                        status:"SAME",
+
+                        text:"GIỐNG"
+
+                    };
+
+                }
+                else{
+
+                    result = {
+
+                        path:path,
+
+                        file1:f1,
+
+                        file2:f2,
+
+                        size1:size1,
+
+                        size2:size2,
+
+                        hash1:hash1,
+
+                        hash2:hash2,
+
+                        status:"DIFFERENT",
+
+                        text:"KHÁC NỘI DUNG"
+
+                    };
+
+                }
+
+            }
+
+        }
+
+
+        results.push(result);
+
+
+        updateProgress(
+            i + 1,
+            paths.length
+        );
+
+
+        if(
+            (i + 1) % 100 === 0
+        ){
+
+            renderResults();
+
+            await yieldBrowser();
+
+        }
+
+    }
+
+
+    updateStatistics();
+
+    renderResults();
+
+    enableAfterCompare();
+
+
+    if(stopped){
+
+        setStatus(
+            "Đã dừng."
+        );
+
+        log(
+            "ĐÃ DỪNG SO SÁNH."
+        );
+
+    }
+    else{
+
+        setStatus(
+            "Hoàn tất so sánh: " +
+            formatNumber(
+                results.length
+            ) +
+            " đường dẫn."
+        );
+
+        log(
+            "HOÀN TẤT SO SÁNH."
+        );
+
+    }
+
+
+    log(
+        "SHA-256: " +
+        formatNumber(hashCount)
+    );
+
+
+    running = false;
+
+}
+
+
+/* =====================================================
+   SHA-256
+===================================================== */
+
+async function sha256File(file){
+
+    /*
+       Web Crypto API.
+
+       File được đọc trực tiếp trên máy.
+    */
+
+    const buffer =
+        await file.arrayBuffer();
+
+
+    const hashBuffer =
+        await crypto.subtle.digest(
+            "SHA-256",
+            buffer
+        );
+
+
+    const bytes =
+        new Uint8Array(
+            hashBuffer
+        );
+
+
+    let result = "";
+
+
+    for(
+        const byte of bytes
+    ){
+
+        result +=
+            byte
+            .toString(16)
+            .padStart(
+                2,
+                "0"
+            );
+
+    }
+
+
+    return result;
+
+}
+
+
+/* =====================================================
+   GET SIZE
+===================================================== */
+
+async function getFileSize(
+    handle
+){
+
+    const file =
+        await handle.getFile();
+
+    return file.size;
+
+}
+
+
+/* =====================================================
+   SYNC
+===================================================== */
+
+async function syncFolders(
+    sourceNumber,
+    targetNumber
+){
+
+    if(
+        !folder1Handle ||
+        !folder2Handle
+    ){
+
+        alert(
+            "Vui lòng chọn cả hai thư mục."
+        );
+
+        return;
+
+    }
+
+
+    if(
+        results.length === 0
+    ){
+
+        alert(
+            "Hãy chạy so sánh trước."
+        );
+
+        return;
+
+    }
+
+
+    if(running){
+
+        return;
+
+    }
+
+
+    const sourceHandle =
+        sourceNumber === 1
+        ? folder1Handle
+        : folder2Handle;
+
+
+    const targetHandle =
+        targetNumber === 1
+        ? folder1Handle
+        : folder2Handle;
+
+
+    const direction =
+        "Folder " +
+        sourceNumber +
+        " → Folder " +
+        targetNumber;
+
+
+    /*
+       Xác nhận trước khi copy
+    */
+
+    const onlySource =
+        sourceNumber === 1
+        ? results.filter(
+            r => r.status === "ONLY1"
+        )
+        : results.filter(
+            r => r.status === "ONLY2"
+        );
+
+
+    const different =
+        results.filter(
+            r => r.status === "DIFFERENT"
+        );
+
+
+    const overwrite =
+        document
+        .getElementById(
+            "overwriteDifferent"
+        )
+        .checked;
+
+
+    const willOverwrite =
+        overwrite
+        ? different.length
+        : 0;
+
+
+    let message =
+        "Đồng bộ " +
+        direction +
+        "\n\n" +
+
+        "File chỉ có ở nguồn: " +
+        formatNumber(
+            onlySource.length
+        ) +
+
+        "\nFile khác nội dung: " +
+        formatNumber(
+            different.length
+        );
+
+
+    if(overwrite){
+
+        message +=
+            "\n\nFile khác nội dung sẽ được ghi đè: " +
+            formatNumber(
+                willOverwrite
+            );
+
+    }
+    else{
+
+        message +=
+            "\n\nFile khác nội dung sẽ được bỏ qua.";
+
+    }
+
+
+    message +=
+        "\n\nBạn có muốn tiếp tục?";
+
+
+    if(
+        !confirm(message)
+    ){
+
+        return;
+
+    }
+
+
+    running = true;
+
+    stopped = false;
+
+
+    resetSyncStats();
+
+    disableDuringOperation();
+
+
+    log(
+        "========================================"
+    );
+
+    log(
+        "BẮT ĐẦU ĐỒNG BỘ"
+    );
+
+    log(
+        direction
+    );
+
+
+    /*
+       Nếu source = 1:
+       copy ONLY1 + DIFFERENT nếu overwrite
+
+       Nếu source = 2:
+       copy ONLY2 + DIFFERENT nếu overwrite
+    */
+
+    const copyList = [];
+
+
+    for(
+        const r of results
+    ){
+
+        if(
+            sourceNumber === 1
+        ){
+
+            if(
+                r.status === "ONLY1"
+            ){
+
+                copyList.push(r);
+
+            }
+            else if(
+                r.status === "DIFFERENT" &&
+                overwrite
+            ){
+
+                copyList.push(r);
+
+            }
+
+        }
+        else{
+
+            if(
+                r.status === "ONLY2"
+            ){
+
+                copyList.push(r);
+
+            }
+            else if(
+                r.status === "DIFFERENT" &&
+                overwrite
+            ){
+
+                copyList.push(r);
+
+            }
+
+        }
+
+    }
+
+
+    const copyOnlyMissing =
+        document
+        .getElementById(
+            "copyOnlyMissing"
+        )
+        .checked;
+
+
+    const createFolders =
+        document
+        .getElementById(
+            "createFolders"
+        )
+        .checked;
+
+
+    /*
+       Nếu không copy file khác nội dung
+       thì chỉ còn file thiếu.
+    */
+
+    for(
+        let i = 0;
+        i < copyList.length;
+        i++
+    ){
+
+        if(stopped){
+
+            break;
+
+        }
+
+
+        const r =
+            copyList[i];
+
+
+        try{
+
+            setStatus(
+                "Copy " +
+                (i + 1) +
+                "/" +
+                copyList.length +
+                ": " +
+                r.path
+            );
+
+
+            const sourceItem =
+                sourceNumber === 1
+                ? r.file1
+                : r.file2;
+
+
+            if(!sourceItem){
+
+                continue;
+
+            }
+
+
+            /*
+               Kiểm tra lại target.
+
+               Nếu target đã tồn tại,
+               không copy nếu:
+               - copyOnlyMissing = true
+               - và file không phải trường hợp
+                 overwrite.
+            */
+
+            const targetItem =
+                sourceNumber === 1
+                ? r.file2
+                : r.file1;
+
+
+            if(
+                targetItem &&
+                copyOnlyMissing
+            ){
+
+                /*
+                   Nếu là DIFFERENT và overwrite
+                   thì vẫn được phép ghi đè.
+                */
+
+                if(
+                    !(
+                        r.status === "DIFFERENT" &&
+                        overwrite
+                    )
+                ){
+
+                    skippedCount++;
+
+                    log(
+                        "BỎ QUA: " +
+                        r.path
+                    );
+
+                    continue;
+
+                }
+
+            }
+
+
+            /*
+               Tạo thư mục cha
+            */
+
+            const parentPath =
+                getParentPath(
+                    r.path
+                );
+
+
+            const targetDirectory =
+                await getOrCreateDirectory(
+                    targetHandle,
+                    parentPath,
+                    createFolders
+                );
+
+
+            /*
+               Nếu không cho tạo thư mục
+               và thư mục chưa tồn tại
+            */
+
+            if(!targetDirectory){
+
+                skippedCount++;
+
+                log(
+                    "BỎ QUA - Không có thư mục: " +
+                    r.path
+                );
+
+                continue;
+
+            }
+
+
+            /*
+               Lấy file nguồn
+            */
+
+            const sourceFile =
+                await sourceItem.handle
+                    .getFile();
+
+
+            /*
+               Tạo/ghi file đích
+            */
+
+            const targetFileHandle =
+                await targetDirectory
+                    .getFileHandle(
+                        sourceItem.name,
+                        {
+                            create:true
+                        }
+                    );
+
+
+            const writable =
+                await targetFileHandle
+                    .createWritable();
+
+
+            /*
+               Copy trực tiếp Blob
+            */
+
+            await writable.write(
+                sourceFile
+            );
+
+
+            await writable.close();
+
+
+            copiedCount++;
+
+
+            log(
+                "COPY OK: " +
+                r.path
+            );
+
+
+            /*
+               Cập nhật kết quả
+            */
+
+            r.syncStatus =
+                "COPIED";
+
+
+        }
+        catch(error){
+
+            failedCount++;
+
+            r.syncStatus =
+                "FAILED";
+
+
+            log(
+                "LỖI: " +
+                r.path +
+                " | " +
+                error.message
+            );
+
+        }
+
+
+        updateSyncProgress(
+            i + 1,
+            copyList.length
+        );
+
+
+        updateSyncStats();
+
+
+        if(
+            (i + 1) % 20 === 0
+        ){
+
+            await yieldBrowser();
+
+        }
+
+    }
+
+
+    updateSyncStats();
+
+
+    enableAfterCompare();
+
+
+    if(stopped){
+
+        setStatus(
+            "Đã dừng đồng bộ."
+        );
+
+        log(
+            "ĐÃ DỪNG ĐỒNG BỘ."
+        );
+
+    }
+    else{
+
+        setStatus(
+            "Đồng bộ hoàn tất."
+        );
+
+        log(
+            "HOÀN TẤT ĐỒNG BỘ."
+        );
+
+    }
+
+
+    log(
+        "Đã copy: " +
+        formatNumber(copiedCount)
+    );
+
+    log(
+        "Bỏ qua: " +
+        formatNumber(skippedCount)
+    );
+
+    log(
+        "Lỗi: " +
+        formatNumber(failedCount)
+    );
+
+
+    running = false;
+
+}
+
+
+/* =====================================================
+   CREATE DIRECTORY
+===================================================== */
+
+async function getOrCreateDirectory(
+    rootHandle,
+    relativePath,
+    create
+){
+
+    if(
+        !relativePath
+    ){
+
+        return rootHandle;
+
+    }
+
+
+    const parts =
+        relativePath
+        .split("/")
+        .filter(
+            p => p !== ""
+        );
+
+
+    let current =
+        rootHandle;
+
+
+    for(
+        const part
+        of parts
+    ){
+
+        try{
+
+            current =
+                await current
+                .getDirectoryHandle(
+                    part,
+                    {
+                        create:create
+                    }
+                );
+
+        }
+        catch(error){
+
+            return null;
+
+        }
+
+    }
+
+
+    return current;
+
+}
+
+
+/* =====================================================
+   PARENT PATH
+===================================================== */
+
+function getParentPath(
+    path
+){
+
+    const index =
+        path.lastIndexOf("/");
+
+
+    if(index < 0){
+
+        return "";
+
+    }
+
+
+    return path.substring(
+        0,
+        index
+    );
+
+}
+
+
+/* =====================================================
+   RENDER RESULTS
+===================================================== */
+
+function renderResults(){
+
+    const body =
+        document
+        .getElementById(
+            "resultBody"
+        );
+
+
+    const filter =
+        document
+        .getElementById(
+            "filter"
+        )
+        .value;
+
+
+    let data =
+        results;
+
+
+    if(
+        filter !== "ALL"
+    ){
+
+        data =
+            results.filter(
+                r =>
+                    r.status === filter
+            );
+
+    }
+
+
+    /*
+       Tránh DOM quá lớn.
+
+       Vẫn giữ toàn bộ results trong RAM
+       để export/sync.
+    */
+
+    const maxDisplay =
+        5000;
+
+
+    const visible =
+        data.slice(
+            0,
+            maxDisplay
+        );
+
+
+    let html = "";
+
+
+    visible.forEach(
+        (r,index) => {
+
+            const cls =
+                r.status
+                .toLowerCase();
+
+
+            html +=
+            "<tr class=\"" +
+            cls +
+            "\">";
+
+
+            html +=
+            "<td>" +
+            (index + 1) +
+            "</td>";
+
+
+            html +=
+            "<td class=\"path\" " +
+            "title=\"" +
+            escapeHtml(r.path) +
+            "\">" +
+            escapeHtml(r.path) +
+            "</td>";
+
+
+            html +=
+            "<td>" +
+            (
+                r.file1
+                ? "Có"
+                : "Không"
+            ) +
+            "</td>";
+
+
+            html +=
+            "<td>" +
+            (
+                r.file2
+                ? "Có"
+                : "Không"
+            ) +
+            "</td>";
+
+
+            html +=
+            "<td>" +
+            (
+                r.size1 === ""
+                ? ""
+                : formatBytes(r.size1)
+            ) +
+            "</td>";
+
+
+            html +=
+            "<td>" +
+            (
+                r.size2 === ""
+                ? ""
+                : formatBytes(r.size2)
+            ) +
+            "</td>";
+
+
+            html +=
+            "<td class=\"small\">" +
+            escapeHtml(
+                r.hash1 || ""
+            ) +
+            "</td>";
+
+
+            html +=
+            "<td class=\"small\">" +
+            escapeHtml(
+                r.hash2 || ""
+            ) +
+            "</td>";
+
+
+            html +=
+            "<td><b>" +
+            escapeHtml(
+                r.text
+            ) +
+            "</b>";
+
+
+            if(
+                r.syncStatus
+            ){
+
+                html +=
+                    "<br><span class=\"small\">" +
+                    escapeHtml(
+                        r.syncStatus
+                    ) +
+                    "</span>";
+
+            }
+
+
+            html +=
+            "</td>";
+
+
+            html +=
+            "</tr>";
+
+        }
+    );
+
+
+    body.innerHTML =
+        html;
+
+
+    document
+    .getElementById(
+        "displayInfo"
+    )
+    .textContent =
+        "Hiển thị " +
+        formatNumber(
+            visible.length
+        ) +
+        " / " +
+        formatNumber(
+            data.length
+        ) +
+        " kết quả";
+
+}
+
+
+/* =====================================================
+   UPDATE STATISTICS
+===================================================== */
+
+function updateStatistics(){
+
+    const same =
+        results.filter(
+            r =>
+                r.status === "SAME"
+        ).length;
+
+
+    const different =
+        results.filter(
+            r =>
+                r.status === "DIFFERENT"
+        ).length;
+
+
+    const only1 =
+        results.filter(
+            r =>
+                r.status === "ONLY1"
+        ).length;
+
+
+    const only2 =
+        results.filter(
+            r =>
+                r.status === "ONLY2"
+        ).length;
+
+
+    document
+    .getElementById(
+        "statBoth"
+    )
+    .textContent =
+        formatNumber(
+            same + different
+        );
+
+
+    document
+    .getElementById(
+        "statSame"
+    )
+    .textContent =
+        formatNumber(
+            same
+        );
+
+
+    document
+    .getElementById(
+        "statDifferent"
+    )
+    .textContent =
+        formatNumber(
+            different
+        );
+
+
+    document
+    .getElementById(
+        "statOnly1"
+    )
+    .textContent =
+        formatNumber(
+            only1
+        );
+
+
+    document
+    .getElementById(
+        "statOnly2"
+    )
+    .textContent =
+        formatNumber(
+            only2
+        );
+
+}
+
+
+/* =====================================================
+   SYNC STATISTICS
+===================================================== */
+
+function resetSyncStats(){
+
+    copiedCount = 0;
+
+    skippedCount = 0;
+
+    failedCount = 0;
+
+
+    updateSyncStats();
+
+}
+
+
+function updateSyncStats(){
+
+    document
+    .getElementById(
+        "statCopied"
+    )
+    .textContent =
+        formatNumber(
+            copiedCount
+        );
+
+
+    document
+    .getElementById(
+        "statSkipped"
+    )
+    .textContent =
+        formatNumber(
+            skippedCount
+        );
+
+
+    document
+    .getElementById(
+        "statFailed"
+    )
+    .textContent =
+        formatNumber(
+            failedCount
+        );
+
+}
+
+
+/* =====================================================
+   PROGRESS
+===================================================== */
+
+function updateProgress(
+    current,
+    total
+){
+
+    const percent =
+        total === 0
+        ? 0
+        : Math.round(
+            current /
+            total *
+            100
+        );
+
+
+    const bar =
+        document
+        .getElementById(
+            "progressBar"
+        );
+
+
+    bar.style.width =
+        percent + "%";
+
+
+    bar.textContent =
+        percent + "%";
+
+}
+
+
+function updateSyncProgress(
+    current,
+    total
+){
+
+    updateProgress(
+        current,
+        total
+    );
+
+}
+
+
+/* =====================================================
+   STOP
+===================================================== */
+
+function stopOperation(){
+
+    stopped = true;
+
+    setStatus(
+        "Đang dừng..."
+    );
+
+}
+
+
+/* =====================================================
+   BUTTON STATE
+===================================================== */
+
+function updateButtons(){
+
+    const ready =
+        !!folder1Handle &&
+        !!folder2Handle;
+
+
+    document
+    .getElementById(
+        "compareBtn"
+    )
+    .disabled =
+        !ready;
+
+}
+
+
+function disableDuringOperation(){
+
+    document
+    .getElementById(
+        "compareBtn"
+    )
+    .disabled = true;
+
+
+    document
+    .getElementById(
+        "sync1Btn"
+    )
+    .disabled = true;
+
+
+    document
+    .getElementById(
+        "sync2Btn"
+    )
+    .disabled = true;
+
+
+    document
+    .getElementById(
+        "choose1Btn"
+    )
+    .disabled = true;
+
+
+    document
+    .getElementById(
+        "choose2Btn"
+    )
+    .disabled = true;
+
+
+    document
+    .getElementById(
+        "stopBtn"
+    )
+    .disabled = false;
+
+}
+
+
+function enableAfterCompare(){
+
+    const ready =
+        !!folder1Handle &&
+        !!folder2Handle;
+
+
+    document
+    .getElementById(
+        "compareBtn"
+    )
+    .disabled =
+        !ready;
+
+
+    document
+    .getElementById(
+        "sync1Btn"
+    )
+    .disabled =
+        results.length === 0;
+
+
+    document
+    .getElementById(
+        "sync2Btn"
+    )
+    .disabled =
+        results.length === 0;
+
+
+    document
+    .getElementById(
+        "choose1Btn"
+    )
+    .disabled = false;
+
+
+    document
+    .getElementById(
+        "choose2Btn"
+    )
+    .disabled = false;
+
+
+    document
+    .getElementById(
+        "stopBtn"
+    )
+    .disabled = true;
+
+
+    document
+    .getElementById(
+        "exportBtn"
+    )
+    .disabled =
+        results.length === 0;
+
+}
+
+
+function finishOperation(){
+
+    running = false;
+
+    enableAfterCompare();
+
+}
+
+
+/* =====================================================
+   PERMISSION
+===================================================== */
+
+async function verifyPermission(
+    handle,
+    write
+){
+
+    const options = {
+
+        mode:
+            write
+            ? "readwrite"
+            : "read"
+
+    };
+
+
+    if(
+        (await handle.queryPermission(
+            options
+        )) === "granted"
+    ){
+
+        return true;
+
+    }
+
+
+    if(
+        (await handle.requestPermission(
+            options
+        )) === "granted"
+    ){
+
+        return true;
+
+    }
+
+
+    return false;
+
+}
+
+
+/* =====================================================
+   EXPORT CSV
+===================================================== */
+
+function exportCSV(){
+
+    if(
+        results.length === 0
+    ){
+
+        return;
+
+    }
+
+
+    const rows = [];
+
+
+    rows.push([
+
+        "STT",
+
+        "Đường dẫn tương đối",
+
+        "Folder 1",
+
+        "Folder 2",
+
+        "Kích thước 1",
+
+        "Kích thước 2",
+
+        "SHA-256 1",
+
+        "SHA-256 2",
+
+        "Kết quả",
+
+        "Trạng thái copy"
+
+    ]);
+
+
+    results.forEach(
+        (r,index) => {
+
+            rows.push([
+
+                index + 1,
+
+                r.path,
+
+                r.file1
+                ? "Có"
+                : "Không",
+
+                r.file2
+                ? "Có"
+                : "Không",
+
+                r.size1 === ""
+                ? ""
+                : r.size1,
+
+                r.size2 === ""
+                ? ""
+                : r.size2,
+
+                r.hash1 || "",
+
+                r.hash2 || "",
+
+                r.text,
+
+                r.syncStatus || ""
+
+            ]);
+
+        }
+    );
+
+
+    const csv =
+        "\uFEFF" +
+        rows
+        .map(
+            row =>
+                row
+                .map(
+                    csvEscape
+                )
+                .join(",")
+        )
+        .join("\r\n");
+
+
+    const blob =
+        new Blob(
+            [csv],
+            {
+                type:
+                "text/csv;charset=utf-8"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const a =
+        document
+        .createElement("a");
+
+
+    a.href = url;
+
+    a.download =
+        "KetQua_SoSanh_DongBo.csv";
+
+
+    document
+    .body
+    .appendChild(a);
+
+
+    a.click();
+
+    a.remove();
+
+
+    URL.revokeObjectURL(url);
+
+}
+
+
+/* =====================================================
+   CSV ESCAPE
+===================================================== */
+
+function csvEscape(
+    value
+){
+
+    if(
+        value === null ||
+        value === undefined
+    ){
+
+        return "";
+
+    }
+
+
+    value =
+        String(value);
+
+
+    if(
+        value.includes(",") ||
+        value.includes('"') ||
+        value.includes("\n") ||
+        value.includes("\r")
+    ){
+
+        return '"' +
+            value.replace(
+                /"/g,
+                '""'
+            ) +
+            '"';
+
+    }
+
+
+    return value;
+
+}
+
+
+/* =====================================================
+   CLEAR
+===================================================== */
+
+function clearAll(){
+
+    if(running){
+
+        return;
+
+    }
+
+
+    folder1Handle = null;
+
+    folder2Handle = null;
+
+    results = [];
+
+    hashCount = 0;
+
+    resetSyncStats();
+
+
+    document
+    .getElementById(
+        "folder1Name"
+    )
+    .textContent =
+        "Chưa chọn";
+
+
+    document
+    .getElementById(
+        "folder2Name"
+    )
+    .textContent =
+        "Chưa chọn";
+
+
+    document
+    .getElementById(
+        "folder1Count"
+    )
+    .textContent =
+        "0 file";
+
+
+    document
+    .getElementById(
+        "folder2Count"
+    )
+    .textContent =
+        "0 file";
+
+
+    document
+    .getElementById(
+        "resultBody"
+    )
+    .innerHTML = "";
+
+
+    document
+    .getElementById(
+        "log"
+    )
+    .textContent = "";
+
+
+    document
+    .getElementById(
+        "progressBar"
+    )
+    .style.width = "0%";
+
+
+    document
+    .getElementById(
+        "progressBar"
+    )
+    .textContent = "0%";
+
+
+    document
+    .getElementById(
+        "stat1"
+    )
+    .textContent = "0";
+
+
+    document
+    .getElementById(
+        "stat2"
+    )
+    .textContent = "0";
+
+
+    document
+    .getElementById(
+        "statBoth"
+    )
+    .textContent = "0";
+
+
+    document
+    .getElementById(
+        "statSame"
+    )
+    .textContent = "0";
+
+
+    document
+    .getElementById(
+        "statDifferent"
+    )
+    .textContent = "0";
+
+
+    document
+    .getElementById(
+        "statOnly1"
+    )
+    .textContent = "0";
+
+
+    document
+    .getElementById(
+        "statOnly2"
+    )
+    .textContent = "0";
+
+
+    document
+    .getElementById(
+        "statCopied"
+    )
+    .textContent = "0";
+
+
+    document
+    .getElementById(
+        "statSkipped"
+    )
+    .textContent = "0";
+
+
+    document
+    .getElementById(
+        "statFailed"
+    )
+    .textContent = "0";
+
+
+    document
+    .getElementById(
+        "exportBtn"
+    )
+    .disabled = true;
+
+
+    document
+    .getElementById(
+        "sync1Btn"
+    )
+    .disabled = true;
+
+
+    document
+    .getElementById(
+        "sync2Btn"
+    )
+    .disabled = true;
+
+
+    document
+    .getElementById(
+        "stopBtn"
+    )
+    .disabled = true;
+
+
+    document
+    .getElementById(
+        "choose1Btn"
+    )
+    .disabled = false;
+
+
+    document
+    .getElementById(
+        "choose2Btn"
+    )
+    .disabled = false;
+
+
+    document
+    .getElementById(
+        "compareBtn"
+    )
+    .disabled = true;
+
+
+    setStatus(
+        "Vui lòng chọn 2 thư mục."
+    );
+
+}
+
+
+/* =====================================================
+   LOG
+===================================================== */
+
+function log(
+    message
+){
+
+    const element =
+        document
+        .getElementById(
+            "log"
+        );
+
+
+    const time =
+        new Date()
+        .toLocaleTimeString(
+            "vi-VN"
+        );
+
+
+    element.textContent +=
+        "[" +
+        time +
+        "] " +
+        message +
+        "\n";
+
+
+    element.scrollTop =
+        element.scrollHeight;
+
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+function setStatus(
+    message
+){
+
+    document
+    .getElementById(
+        "status"
+    )
+    .textContent =
+        message;
+
+}
+
+
+/* =====================================================
+   FORMAT
+===================================================== */
+
+function formatNumber(
+    number
+){
+
+    return Number(
+        number
+    ).toLocaleString(
+        "vi-VN"
+    );
+
+}
+
+
+function formatBytes(
+    bytes
+){
+
+    if(
+        bytes === 0
+    ){
+
+        return "0 B";
+
+    }
+
+
+    const units = [
+
+        "B",
+        "KB",
+        "MB",
+        "GB",
+        "TB"
+
+    ];
+
+
+    const i =
+        Math.floor(
+            Math.log(bytes) /
+            Math.log(1024)
+        );
+
+
+    return (
+        bytes /
+        Math.pow(
+            1024,
+            i
+        )
+    ).toFixed(
+        i === 0
+        ? 0
+        : 2
+    ) +
+    " " +
+    units[i];
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(
+    value
+){
+
+    if(
+        value === null ||
+        value === undefined
+    ){
+
+        return "";
+
+    }
+
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =====================================================
+   YIELD
+===================================================== */
+
+function yieldBrowser(){
+
+    return new Promise(
+        resolve =>
+            setTimeout(
+                resolve,
+                0
+            )
+    );
+
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1871 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+
+<title>So sánh 2 thư mục</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:20px;
+    font-family:Arial,Tahoma,sans-serif;
+    font-size:14px;
+    background:#f5f6f8;
+    color:#222;
+}
+
+h1{
+    margin:0 0 20px 0;
+    font-size:24px;
+}
+
+.container{
+    max-width:1500px;
+    margin:auto;
+}
+
+.panel{
+    background:white;
+    border:1px solid #ddd;
+    border-radius:8px;
+    padding:18px;
+    margin-bottom:15px;
+}
+
+.folder-row{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.folder-box{
+    flex:1;
+    min-width:350px;
+    border:1px solid #ddd;
+    border-radius:6px;
+    padding:15px;
+}
+
+.folder-box h3{
+    margin-top:0;
+}
+
+input[type=file]{
+    width:100%;
+    padding:10px;
+    border:1px dashed #aaa;
+    border-radius:5px;
+    background:#fafafa;
+}
+
+button{
+    border:0;
+    padding:10px 16px;
+    border-radius:5px;
+    cursor:pointer;
+    font-size:14px;
+    margin-right:8px;
+    margin-bottom:8px;
+}
+
+button:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+}
+
+.btn-start{
+    background:#1976d2;
+    color:white;
+}
+
+.btn-stop{
+    background:#d32f2f;
+    color:white;
+}
+
+.btn-export{
+    background:#388e3c;
+    color:white;
+}
+
+.btn-clear{
+    background:#757575;
+    color:white;
+}
+
+.status{
+    margin-top:10px;
+    padding:10px;
+    background:#f1f3f4;
+    border-radius:5px;
+    min-height:40px;
+}
+
+.progress-container{
+    margin-top:12px;
+    height:24px;
+    background:#ddd;
+    border-radius:12px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    height:100%;
+    width:0%;
+    background:#1976d2;
+    color:white;
+    text-align:center;
+    line-height:24px;
+    font-size:12px;
+    transition:width .1s;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:10px;
+    margin-top:15px;
+}
+
+.stat{
+    background:#fafafa;
+    border:1px solid #ddd;
+    border-radius:6px;
+    padding:12px;
+}
+
+.stat-title{
+    font-size:12px;
+    color:#666;
+}
+
+.stat-value{
+    font-size:20px;
+    font-weight:bold;
+    margin-top:5px;
+}
+
+.controls{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    align-items:center;
+}
+
+select{
+    padding:9px;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+.table-wrap{
+    max-height:600px;
+    overflow:auto;
+    border:1px solid #ddd;
+}
+
+table{
+    border-collapse:collapse;
+    width:100%;
+    background:white;
+}
+
+th,td{
+    border-bottom:1px solid #ddd;
+    padding:7px 9px;
+    text-align:left;
+    white-space:nowrap;
+}
+
+th{
+    position:sticky;
+    top:0;
+    background:#eee;
+    z-index:2;
+}
+
+.same{
+    background:#e8f5e9;
+}
+
+.different{
+    background:#ffebee;
+}
+
+.only1{
+    background:#fff3e0;
+}
+
+.only2{
+    background:#e3f2fd;
+}
+
+.missing{
+    background:#fce4ec;
+}
+
+.small{
+    font-size:12px;
+    color:#666;
+}
+
+.path{
+    max-width:700px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.warning{
+    background:#fff8e1;
+    border:1px solid #ffe082;
+    padding:12px;
+    border-radius:6px;
+    margin-top:10px;
+}
+
+.success{
+    color:#2e7d32;
+    font-weight:bold;
+}
+
+.error{
+    color:#c62828;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>So sánh 2 thư mục</h1>
+
+<div class="panel">
+
+    <div class="folder-row">
+
+        <div class="folder-box">
+
+            <h3>Thư mục 1</h3>
+
+            <input
+                type="file"
+                id="folder1"
+                webkitdirectory
+                directory
+                multiple
+            >
+
+            <div id="folder1Info" class="small">
+                Chưa chọn thư mục
+            </div>
+
+        </div>
+
+
+        <div class="folder-box">
+
+            <h3>Thư mục 2</h3>
+
+            <input
+                type="file"
+                id="folder2"
+                webkitdirectory
+                directory
+                multiple
+            >
+
+            <div id="folder2Info" class="small">
+                Chưa chọn thư mục
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="warning">
+
+        <b>Lưu ý:</b>
+
+        Chương trình đọc cả các thư mục con.
+        File không được upload lên Internet.
+        SHA-256 chỉ được thực hiện đối với các file
+        có cùng đường dẫn tương đối và cùng kích thước.
+
+    </div>
+
+</div>
+
+
+<div class="panel">
+
+    <button
+        class="btn-start"
+        id="startBtn"
+        onclick="startCompare()"
+    >
+        Bắt đầu so sánh
+    </button>
+
+    <button
+        class="btn-stop"
+        id="stopBtn"
+        onclick="stopCompare()"
+        disabled
+    >
+        Hủy
+    </button>
+
+    <button
+        class="btn-export"
+        id="exportBtn"
+        onclick="exportCSV()"
+        disabled
+    >
+        Xuất CSV mở bằng Excel
+    </button>
+
+    <button
+        class="btn-clear"
+        onclick="clearAll()"
+    >
+        Xóa kết quả
+    </button>
+
+    <div id="status" class="status">
+        Sẵn sàng.
+    </div>
+
+    <div class="progress-container">
+        <div
+            id="progressBar"
+            class="progress-bar"
+        >
+            0%
+        </div>
+    </div>
+
+</div>
+
+
+<div class="panel">
+
+    <h3>Thống kê</h3>
+
+    <div class="stats">
+
+        <div class="stat">
+            <div class="stat-title">
+                File Folder 1
+            </div>
+            <div
+                class="stat-value"
+                id="count1"
+            >
+                0
+            </div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-title">
+                File Folder 2
+            </div>
+            <div
+                class="stat-value"
+                id="count2"
+            >
+                0
+            </div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-title">
+                Có ở cả 2
+            </div>
+            <div
+                class="stat-value"
+                id="bothCount"
+            >
+                0
+            </div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-title">
+                Giống hoàn toàn
+            </div>
+            <div
+                class="stat-value"
+                id="sameCount"
+            >
+                0
+            </div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-title">
+                Khác nội dung
+            </div>
+            <div
+                class="stat-value"
+                id="differentCount"
+            >
+                0
+            </div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-title">
+                Chỉ Folder 1
+            </div>
+            <div
+                class="stat-value"
+                id="only1Count"
+            >
+                0
+            </div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-title">
+                Chỉ Folder 2
+            </div>
+            <div
+                class="stat-value"
+                id="only2Count"
+            >
+                0
+            </div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-title">
+                SHA-256 đã kiểm tra
+            </div>
+            <div
+                class="stat-value"
+                id="hashCount"
+            >
+                0
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="panel">
+
+    <div class="controls">
+
+        <label>
+            Hiển thị:
+        </label>
+
+        <select
+            id="filter"
+            onchange="renderTable()"
+        >
+            <option value="ALL">
+                Tất cả
+            </option>
+
+            <option value="SAME">
+                Giống
+            </option>
+
+            <option value="DIFFERENT">
+                Khác nội dung
+            </option>
+
+            <option value="ONLY1">
+                Chỉ Folder 1
+            </option>
+
+            <option value="ONLY2">
+                Chỉ Folder 2
+            </option>
+        </select>
+
+        <span
+            id="displayInfo"
+            class="small"
+        ></span>
+
+    </div>
+
+    <br>
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>STT</th>
+
+                    <th>Đường dẫn tương đối</th>
+
+                    <th>Folder 1</th>
+
+                    <th>Folder 2</th>
+
+                    <th>Kích thước 1</th>
+
+                    <th>Kích thước 2</th>
+
+                    <th>SHA-256 1</th>
+
+                    <th>SHA-256 2</th>
+
+                    <th>Kết quả</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="resultBody">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   GLOBAL
+===================================================== */
+
+let files1 = [];
+let files2 = [];
+
+let results = [];
+
+let stopped = false;
+
+let rootName1 = "";
+let rootName2 = "";
+
+let hashCounter = 0;
+
+
+/* =====================================================
+   FILE INPUT
+===================================================== */
+
+document
+.getElementById("folder1")
+.addEventListener("change", function(){
+
+    files1 = Array.from(this.files);
+
+    if(files1.length > 0){
+
+        rootName1 =
+            files1[0].webkitRelativePath
+            .split("/")
+            [0];
+
+        document
+        .getElementById("folder1Info")
+        .textContent =
+            rootName1 +
+            " — " +
+            formatNumber(files1.length) +
+            " file";
+
+        document
+        .getElementById("count1")
+        .textContent =
+            formatNumber(files1.length);
+
+    }
+
+});
+
+
+document
+.getElementById("folder2")
+.addEventListener("change", function(){
+
+    files2 = Array.from(this.files);
+
+    if(files2.length > 0){
+
+        rootName2 =
+            files2[0].webkitRelativePath
+            .split("/")
+            [0];
+
+        document
+        .getElementById("folder2Info")
+        .textContent =
+            rootName2 +
+            " — " +
+            formatNumber(files2.length) +
+            " file";
+
+        document
+        .getElementById("count2")
+        .textContent =
+            formatNumber(files2.length);
+
+    }
+
+});
+
+
+/* =====================================================
+   START
+===================================================== */
+
+async function startCompare(){
+
+    if(files1.length === 0){
+
+        alert(
+            "Vui lòng chọn Thư mục 1."
+        );
+
+        return;
+
+    }
+
+
+    if(files2.length === 0){
+
+        alert(
+            "Vui lòng chọn Thư mục 2."
+        );
+
+        return;
+
+    }
+
+
+    stopped = false;
+
+    results = [];
+
+    hashCounter = 0;
+
+    document
+    .getElementById("startBtn")
+    .disabled = true;
+
+    document
+    .getElementById("stopBtn")
+    .disabled = false;
+
+    document
+    .getElementById("exportBtn")
+    .disabled = true;
+
+
+    resetStats();
+
+
+    setStatus(
+        "Đang tạo danh sách file..."
+    );
+
+
+    /*
+       Map đường dẫn → File
+    */
+
+    const map1 = new Map();
+
+    const map2 = new Map();
+
+
+    for(const file of files1){
+
+        const path =
+            getRelativePath(file);
+
+        map1.set(path, file);
+
+    }
+
+
+    for(const file of files2){
+
+        const path =
+            getRelativePath(file);
+
+        map2.set(path, file);
+
+    }
+
+
+    /*
+       Tạo danh sách tất cả path
+    */
+
+    const allPaths =
+        new Set([
+            ...map1.keys(),
+            ...map2.keys()
+        ]);
+
+
+    const paths =
+        Array.from(allPaths);
+
+    paths.sort();
+
+
+    document
+    .getElementById("bothCount")
+    .textContent =
+        formatNumber(
+            paths.filter(
+                p =>
+                    map1.has(p) &&
+                    map2.has(p)
+            ).length
+        );
+
+
+    /*
+       So sánh
+    */
+
+    let processed = 0;
+
+
+    for(const path of paths){
+
+        if(stopped){
+
+            setStatus(
+                "Đã hủy quá trình."
+            );
+
+            break;
+
+        }
+
+
+        const f1 =
+            map1.get(path);
+
+        const f2 =
+            map2.get(path);
+
+
+        let result;
+
+
+        /*
+           Chỉ có Folder 1
+        */
+
+        if(f1 && !f2){
+
+            result = {
+
+                path:path,
+
+                file1:f1,
+
+                file2:null,
+
+                size1:f1.size,
+
+                size2:"",
+
+                hash1:"",
+
+                hash2:"",
+
+                status:"ONLY1",
+
+                text:"Chỉ Folder 1"
+
+            };
+
+        }
+
+
+        /*
+           Chỉ có Folder 2
+        */
+
+        else if(!f1 && f2){
+
+            result = {
+
+                path:path,
+
+                file1:null,
+
+                file2:f2,
+
+                size1:"",
+
+                size2:f2.size,
+
+                hash1:"",
+
+                hash2:"",
+
+                status:"ONLY2",
+
+                text:"Chỉ Folder 2"
+
+            };
+
+        }
+
+
+        /*
+           Có cả hai
+        */
+
+        else{
+
+            /*
+               Khác kích thước:
+               chắc chắn khác nội dung
+            */
+
+            if(f1.size !== f2.size){
+
+                result = {
+
+                    path:path,
+
+                    file1:f1,
+
+                    file2:f2,
+
+                    size1:f1.size,
+
+                    size2:f2.size,
+
+                    hash1:"Không cần hash",
+
+                    hash2:"Không cần hash",
+
+                    status:"DIFFERENT",
+
+                    text:"Khác kích thước"
+
+                };
+
+            }
+
+
+            /*
+               Cùng kích thước:
+               phải hash
+            */
+
+            else{
+
+                setStatus(
+                    "Đang SHA-256: " +
+                    path
+                );
+
+
+                const hashes =
+                    await hashBoth(
+                        f1,
+                        f2
+                    );
+
+
+                if(stopped){
+
+                    break;
+
+                }
+
+
+                hashCounter++;
+
+                document
+                .getElementById("hashCount")
+                .textContent =
+                    formatNumber(
+                        hashCounter
+                    );
+
+
+                if(
+                    hashes.hash1 ===
+                    hashes.hash2
+                ){
+
+                    result = {
+
+                        path:path,
+
+                        file1:f1,
+
+                        file2:f2,
+
+                        size1:f1.size,
+
+                        size2:f2.size,
+
+                        hash1:hashes.hash1,
+
+                        hash2:hashes.hash2,
+
+                        status:"SAME",
+
+                        text:"GIỐNG"
+
+                    };
+
+                }
+
+                else{
+
+                    result = {
+
+                        path:path,
+
+                        file1:f1,
+
+                        file2:f2,
+
+                        size1:f1.size,
+
+                        size2:f2.size,
+
+                        hash1:hashes.hash1,
+
+                        hash2:hashes.hash2,
+
+                        status:"DIFFERENT",
+
+                        text:"KHÁC NỘI DUNG"
+
+                    };
+
+                }
+
+            }
+
+        }
+
+
+        results.push(result);
+
+
+        processed++;
+
+
+        updateProgress(
+            processed,
+            paths.length
+        );
+
+
+        /*
+           Cập nhật bảng theo từng 100 file
+           để tránh trình duyệt phải render
+           quá nhiều lần.
+        */
+
+        if(
+            processed % 100 === 0 ||
+            processed === paths.length
+        ){
+
+            renderTable();
+
+            await yieldBrowser();
+
+        }
+
+    }
+
+
+    updateStatistics();
+
+
+    document
+    .getElementById("stopBtn")
+    .disabled = true;
+
+    document
+    .getElementById("startBtn")
+    .disabled = false;
+
+
+    if(!stopped){
+
+        setStatus(
+            "Hoàn tất. Đã kiểm tra " +
+            formatNumber(results.length) +
+            " đường dẫn."
+        );
+
+    }
+
+
+    document
+    .getElementById("exportBtn")
+    .disabled =
+        results.length === 0;
+
+}
+
+
+/* =====================================================
+   SHA-256
+===================================================== */
+
+async function sha256(file){
+
+    /*
+       arrayBuffer đọc nội dung file
+    */
+
+    const buffer =
+        await file.arrayBuffer();
+
+
+    /*
+       Web Crypto API của Chrome
+    */
+
+    const hashBuffer =
+        await crypto.subtle.digest(
+            "SHA-256",
+            buffer
+        );
+
+
+    /*
+       Chuyển ArrayBuffer → HEX
+    */
+
+    const hashArray =
+        Array.from(
+            new Uint8Array(hashBuffer)
+        );
+
+
+    return hashArray
+        .map(
+            b =>
+                b.toString(16)
+                .padStart(2,"0")
+        )
+        .join("");
+
+}
+
+
+/* =====================================================
+   HASH 2 FILE
+===================================================== */
+
+async function hashBoth(
+    file1,
+    file2
+){
+
+    /*
+       Hash tuần tự để tránh dùng quá nhiều RAM.
+
+       Với file XML nhỏ, cách này ổn định hơn.
+    */
+
+    const hash1 =
+        await sha256(file1);
+
+
+    if(stopped){
+
+        return {
+            hash1:"",
+            hash2:""
+        };
+
+    }
+
+
+    const hash2 =
+        await sha256(file2);
+
+
+    return {
+
+        hash1:hash1,
+
+        hash2:hash2
+
+    };
+
+}
+
+
+/* =====================================================
+   RELATIVE PATH
+===================================================== */
+
+function getRelativePath(file){
+
+    const fullPath =
+        file.webkitRelativePath;
+
+    const parts =
+        fullPath.split("/");
+
+
+    /*
+       Bỏ tên thư mục gốc.
+
+       Ví dụ:
+
+       FolderA/2026/01/A.xml
+
+       thành:
+
+       2026/01/A.xml
+    */
+
+    return parts
+        .slice(1)
+        .join("/");
+
+}
+
+
+/* =====================================================
+   PROGRESS
+===================================================== */
+
+function updateProgress(
+    current,
+    total
+){
+
+    const percent =
+        total === 0
+        ? 0
+        : Math.round(
+            current /
+            total *
+            100
+        );
+
+
+    const bar =
+        document
+        .getElementById(
+            "progressBar"
+        );
+
+
+    bar.style.width =
+        percent + "%";
+
+    bar.textContent =
+        percent + "%";
+
+
+    setStatus(
+        "Đang xử lý " +
+        formatNumber(current) +
+        " / " +
+        formatNumber(total)
+    );
+
+}
+
+
+/* =====================================================
+   RENDER TABLE
+===================================================== */
+
+function renderTable(){
+
+    const body =
+        document
+        .getElementById(
+            "resultBody"
+        );
+
+
+    const filter =
+        document
+        .getElementById(
+            "filter"
+        )
+        .value;
+
+
+    let filtered =
+        results;
+
+
+    if(filter !== "ALL"){
+
+        filtered =
+            results.filter(
+                r =>
+                    r.status === filter
+            );
+
+    }
+
+
+    /*
+       Với hàng chục nghìn dòng,
+       không render toàn bộ cùng lúc.
+
+       Hiển thị tối đa 5000 dòng.
+    */
+
+    const maxDisplay = 5000;
+
+
+    const display =
+        filtered.slice(
+            0,
+            maxDisplay
+        );
+
+
+    let html = "";
+
+
+    display.forEach(
+        (r,index) => {
+
+            let cls =
+                r.status
+                .toLowerCase();
+
+
+            html += `
+
+                <tr class="${cls}">
+
+                    <td>
+                        ${index + 1}
+                    </td>
+
+                    <td
+                        class="path"
+                        title="${escapeHtml(r.path)}"
+                    >
+                        ${escapeHtml(r.path)}
+                    </td>
+
+                    <td>
+                        ${
+                            r.file1
+                            ? "Có"
+                            : "Không"
+                        }
+                    </td>
+
+                    <td>
+                        ${
+                            r.file2
+                            ? "Có"
+                            : "Không"
+                        }
+                    </td>
+
+                    <td>
+                        ${
+                            r.size1 === ""
+                            ? ""
+                            : formatBytes(r.size1)
+                        }
+                    </td>
+
+                    <td>
+                        ${
+                            r.size2 === ""
+                            ? ""
+                            : formatBytes(r.size2)
+                        }
+                    </td>
+
+                    <td>
+                        <span class="small">
+                            ${escapeHtml(
+                                r.hash1
+                            )}
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="small">
+                            ${escapeHtml(
+                                r.hash2
+                            )}
+                        </span>
+                    </td>
+
+                    <td>
+                        <b>
+                            ${escapeHtml(
+                                r.text
+                            )}
+                        </b>
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+    );
+
+
+    body.innerHTML =
+        html;
+
+
+    document
+    .getElementById(
+        "displayInfo"
+    )
+    .textContent =
+        "Hiển thị " +
+        formatNumber(display.length) +
+        " / " +
+        formatNumber(filtered.length) +
+        " kết quả";
+
+}
+
+
+/* =====================================================
+   STATISTICS
+===================================================== */
+
+function updateStatistics(){
+
+    const same =
+        results.filter(
+            r => r.status === "SAME"
+        ).length;
+
+
+    const different =
+        results.filter(
+            r =>
+                r.status ===
+                "DIFFERENT"
+        ).length;
+
+
+    const only1 =
+        results.filter(
+            r =>
+                r.status ===
+                "ONLY1"
+        ).length;
+
+
+    const only2 =
+        results.filter(
+            r =>
+                r.status ===
+                "ONLY2"
+        ).length;
+
+
+    const both =
+        same +
+        different;
+
+
+    document
+    .getElementById("bothCount")
+    .textContent =
+        formatNumber(both);
+
+
+    document
+    .getElementById("sameCount")
+    .textContent =
+        formatNumber(same);
+
+
+    document
+    .getElementById("differentCount")
+    .textContent =
+        formatNumber(different);
+
+
+    document
+    .getElementById("only1Count")
+    .textContent =
+        formatNumber(only1);
+
+
+    document
+    .getElementById("only2Count")
+    .textContent =
+        formatNumber(only2);
+
+
+    document
+    .getElementById("hashCount")
+    .textContent =
+        formatNumber(hashCounter);
+
+}
+
+
+/* =====================================================
+   RESET STAT
+===================================================== */
+
+function resetStats(){
+
+    const ids = [
+
+        "bothCount",
+        "sameCount",
+        "differentCount",
+        "only1Count",
+        "only2Count",
+        "hashCount"
+
+    ];
+
+
+    ids.forEach(
+        id => {
+
+            document
+            .getElementById(id)
+            .textContent = "0";
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   STOP
+===================================================== */
+
+function stopCompare(){
+
+    stopped = true;
+
+    setStatus(
+        "Đang dừng..."
+    );
+
+}
+
+
+/* =====================================================
+   CLEAR
+===================================================== */
+
+function clearAll(){
+
+    stopped = true;
+
+    results = [];
+
+    files1 = [];
+
+    files2 = [];
+
+    rootName1 = "";
+
+    rootName2 = "";
+
+    hashCounter = 0;
+
+
+    document
+    .getElementById("folder1")
+    .value = "";
+
+
+    document
+    .getElementById("folder2")
+    .value = "";
+
+
+    document
+    .getElementById("folder1Info")
+    .textContent =
+        "Chưa chọn thư mục";
+
+
+    document
+    .getElementById("folder2Info")
+    .textContent =
+        "Chưa chọn thư mục";
+
+
+    document
+    .getElementById("resultBody")
+    .innerHTML = "";
+
+
+    document
+    .getElementById("progressBar")
+    .style.width = "0%";
+
+
+    document
+    .getElementById("progressBar")
+    .textContent = "0%";
+
+
+    resetStats();
+
+
+    document
+    .getElementById("exportBtn")
+    .disabled = true;
+
+
+    document
+    .getElementById("stopBtn")
+    .disabled = true;
+
+
+    document
+    .getElementById("startBtn")
+    .disabled = false;
+
+
+    setStatus(
+        "Sẵn sàng."
+    );
+
+}
+
+
+/* =====================================================
+   EXPORT CSV
+===================================================== */
+
+function exportCSV(){
+
+    if(results.length === 0){
+
+        alert(
+            "Không có dữ liệu để xuất."
+        );
+
+        return;
+
+    }
+
+
+    const rows = [];
+
+
+    rows.push([
+
+        "STT",
+
+        "Đường dẫn tương đối",
+
+        "Folder 1",
+
+        "Folder 2",
+
+        "Kích thước Folder 1",
+
+        "Kích thước Folder 2",
+
+        "SHA-256 Folder 1",
+
+        "SHA-256 Folder 2",
+
+        "Kết quả"
+
+    ]);
+
+
+    results.forEach(
+        (r,index) => {
+
+            rows.push([
+
+                index + 1,
+
+                r.path,
+
+                r.file1
+                ? "Có"
+                : "Không",
+
+                r.file2
+                ? "Có"
+                : "Không",
+
+                r.size1 === ""
+                ? ""
+                : r.size1,
+
+                r.size2 === ""
+                ? ""
+                : r.size2,
+
+                r.hash1,
+
+                r.hash2,
+
+                r.text
+
+            ]);
+
+        }
+    );
+
+
+    const csv =
+        "\uFEFF" +
+        rows
+        .map(
+            row =>
+                row
+                .map(
+                    cell =>
+                        csvEscape(cell)
+                )
+                .join(",")
+        )
+        .join("\r\n");
+
+
+    const blob =
+        new Blob(
+            [csv],
+            {
+                type:
+                "text/csv;charset=utf-8"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const a =
+        document.createElement("a");
+
+
+    a.href = url;
+
+    a.download =
+        "ket_qua_so_sanh_thu_muc.csv";
+
+
+    document
+    .body
+    .appendChild(a);
+
+
+    a.click();
+
+
+    a.remove();
+
+
+    URL.revokeObjectURL(url);
+
+}
+
+
+/* =====================================================
+   CSV ESCAPE
+===================================================== */
+
+function csvEscape(value){
+
+    value =
+        value === null ||
+        value === undefined
+        ? ""
+        : String(value);
+
+
+    if(
+        value.includes('"') ||
+        value.includes(",") ||
+        value.includes("\n") ||
+        value.includes("\r")
+    ){
+
+        return '"' +
+            value.replace(
+                /"/g,
+                '""'
+            ) +
+            '"';
+
+    }
+
+
+    return value;
+
+}
+
+
+/* =====================================================
+   FORMAT
+===================================================== */
+
+function formatNumber(n){
+
+    return Number(n)
+        .toLocaleString("vi-VN");
+
+}
+
+
+function formatBytes(bytes){
+
+    if(bytes === 0)
+        return "0 B";
+
+
+    const units = [
+        "B",
+        "KB",
+        "MB",
+        "GB",
+        "TB"
+    ];
+
+
+    const i =
+        Math.floor(
+            Math.log(bytes) /
+            Math.log(1024)
+        );
+
+
+    return (
+        bytes /
+        Math.pow(1024,i)
+    )
+    .toFixed(
+        i === 0 ? 0 : 2
+    ) +
+    " " +
+    units[i];
+
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+function setStatus(text){
+
+    document
+    .getElementById("status")
+    .textContent =
+        text;
+
+}
+
+
+/* =====================================================
+   YIELD
+===================================================== */
+
+function yieldBrowser(){
+
+    return new Promise(
+        resolve =>
+            setTimeout(
+                resolve,
+                0
+            )
+    );
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value){
+
+    if(
+        value === null ||
+        value === undefined
+    ){
+
+        return "";
+
+    }
+
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+</script>
+
+</body>
+</html>
