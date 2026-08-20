@@ -428,9 +428,10 @@ else if(MSTTCGP==="0315298333") { // TCT
   add(`- `);add(`http://www.tctinvoice.com/?matracuu=${MaTCHdon}`);add(`<br>`);
   }
 
-else if(["0311622035","0315194912","0303211948","0315191291","0316642395"].includes(MSTTCGP)) { // EVAT
+else if(["0311622035","0315194912","0303211948","0315191291","0316642395","0307633556"].includes(MSTTCGP)) { // EVAT
   add(`- Mã tra cứu: ${MaTCHdon}`);add(`<br>`);
   add(`- Mã công ty: ${MSTNBan}`);add(`<br>`);
+  add(`- `);add(`http://tracuu.evat.vn/bill?cmpn_key=${MSTNBan}&private_code=${MaTCHdon}`);add(`<br>`);
   add(`- `);add(`http://tvl.evat.vn/bill?cmpn_key=${MSTNBan}&private_code=${MaTCHdon}`);add(`<br>`);
   add(`- `);add(`http://ttl.evat.vn/bill?cmpn_key=${MSTNBan}&private_code=${MaTCHdon}`);add(`<br>`);
   add(`- `);add(`http://vlc.evat.vn/bill?cmpn_key=${MSTNBan}&private_code=${MaTCHdon}`);add(`<br>`);
