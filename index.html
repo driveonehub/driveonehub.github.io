@@ -718,9 +718,11 @@ else if(MSTTCGP==="0106870211") { // ICORP
   add(`- `);add(`https://tracuu.vietinvoice.vn/erp/rest/s1//iam-entry/invoices/${MaTCHdon || MCCQT}/pdf`);add(`<br>`);
   }
 
-else if (MSTTCGP === "0103243195") { // Sapo
-  add(`- Mã tra cứu: ${IDHDon1}`);add(`<br>`);
-  add(`- `);add(`https://www.sapo.vn/tra-cuu-sapo-invoice.html?reference_code=${IDHDon1}`);add(`<br>`);
+else if (MSTTCGP === "0303549303") { // Kim Tự Tháp
+  add(`- Mã tra cứu: ${MaTCHdon}`);add(`<br>`);
+  add(`- `);add(`https://e-invoices.vn/User/Search?CurrSecretCodeSearchStr=${MaTCHdon}`);add(`<br>`);
+  add(`- `);add(`https://pscform.azurewebsites.net/api/fileServices/${MaTCHdon}`);add(`<br>`);
+  add(`- `);add(`https://pscform.azurewebsites.net/api/fileServices/${MaTCHdon}`)/xml;add(`<br>`);
   } 
 
 else if (MSTTCGP === "0314058603") { // Viễn Đông SG
@@ -741,6 +743,16 @@ else if(MSTTCGP==="0313253288") { // Tadu
   add(`- `);add(`https://tracuu.autoinvoice.vn/taihd.zul?seen=true&id=${MaTCHdon}`);add(`<br>`);
   add(`- `);add(`${LinkTCHdon}/taihd.zul?seen=true&id=${MaTCHdon}`);add(`<br>`);
   }
+
+else if (MSTTCGP === "0103243195") { // Sapo
+  add(`- Mã tra cứu: ${IDHDon1}`);add(`<br>`);
+  add(`- `);add(`https://www.sapo.vn/tra-cuu-sapo-invoice.html?reference_code=${IDHDon1}`);add(`<br>`);
+  } 
+
+else if (MSTTCGP === "0104359717") { // Kiot Viet
+  add(`- Mã tra cứu: ${MaTCHdon}`);add(`<br>`);
+  add(`- `);add(`https://tracuuhoadon.kiotviet.vn/?mtc=${IDHDon1}`);add(`<br>`);
+  } 
 
  let html=`<div class="block"><b>File:</b> ${name}<br><br>
 Mẫu số - ký kiệu: ${KHMSHDon} - ${KHHDon}<br>
