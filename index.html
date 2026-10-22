@@ -45,6 +45,9 @@ a:hover{color:#003366}
 /* ===== DASHBOARD TABS ===== */
 .tabs{
   display:flex;
+  justify-content: flex-start;
+  align-self: stretch;
+  width: 100%;
   gap:6px;
   margin-bottom:14px;
 }
@@ -59,7 +62,7 @@ a:hover{color:#003366}
   border:1px solid #bbdefb;
 }
 .tab:hover{
-  background:#bbdefb;
+  background:#b2ed4c;
 }
 .tab.active{
   background:linear-gradient(135deg,#64b5f6,#ffffff);
@@ -233,6 +236,7 @@ a:hover{color:#003366}
     
 <div class="tabs" id="dashboardTabs">
   <a class="tab" data-tab="lookup" href="#">Tra cứu XML</a>
+  <a class="tab" data-tab="calculate" href="may-tinh.html">Máy tính</a>
 </div>
     
 <h3>Tải lên nhiều file XML hóa đơn</h3>
