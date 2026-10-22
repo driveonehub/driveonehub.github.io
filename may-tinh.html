@@ -1,0 +1,756 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Máy tính Online</title>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --text: #34456b;
+  --panel: #ffffff;
+  --screen: #f0f8ff;
+  --key: #ffffff;
+  --key-hover: #e8f2ff;
+  --accent: #ff8a65;
+  --accent2: #ff8a65;
+  --operator: #dceaff;
+  --danger: #ffe1e8;
+  --border: #dce7fa;
+}
+
+html {
+  min-height: 100%;
+  background: none;
+}
+
+/* ===== DASHBOARD TABS ===== */
+.tabs{
+  display:flex;
+  justify-content: flex-start;
+  align-self: stretch;
+  width: 100%;
+  gap:6px;
+  margin-bottom:14px;
+}
+.tab{
+  padding:8px 16px;
+  background:#e3f2fd;
+  border-radius:8px 8px 0 0;
+  text-decoration:none;
+  color:#045;
+  font-weight:600;
+  transition:all .25s ease;
+  border:1px solid #bbdefb;
+}
+.tab:hover{
+  background:#b2ed4c;
+}
+.tab.active{
+  background:linear-gradient(135deg,#64b5f6,#ffffff);
+  color:#003;
+  border-bottom:1px solid #fff;
+}
+/* ===== END DASHBOARD TABS ===== */
+
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 10px 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+
+  /* Nền trong suốt */
+  background: none;
+
+  color: var(--text);
+  font-family: "Trebuchet MS", Arial, sans-serif;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  color: var(--text);
+  border: 2px solid transparent;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .12s, filter .12s, box-shadow .12s;
+}
+
+button:hover {
+  filter: brightness(.97);
+  box-shadow: 0 3px 8px #8da8d522;
+}
+
+button:active {
+  transform: scale(.95);
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid #70b7ff;
+  outline-offset: 3px;
+}
+
+.calc,
+.app {
+  width: 100%;
+  max-width: 460px;
+  padding: 20px;
+  background: #ffffff;
+  border: 3px solid #d9eaff;
+  border-radius: 26px;
+  box-shadow: 0 8px 0 #cbdcf5;
+}
+
+h2 {
+  text-align: center;
+  color: #5579df;
+  font-size: 25px;
+  font-weight: 900;
+  margin: 5px 0 18px;
+}
+
+.modes,
+.mode-switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.mode-switch {
+  display: flex;
+  padding: 4px;
+  border-radius: 14px;
+  background: #f0f5ff;
+}
+
+.modes button,
+.mode-switch button {
+  padding: 12px 6px;
+  border-radius: 13px;
+  background: #edf3ff;
+  color: #55709f;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.modes button.active,
+.mode-switch button.active {
+  background: #ffca68;
+  color: #65471b;
+}
+
+.screen {
+  background: #effaff;
+  border: 3px solid #d8f0ff;
+  padding: 16px;
+  border-radius: 20px;
+  margin-bottom: 15px;
+}
+
+#expr,
+#expression {
+  width: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: #5278d8;
+  font-size: 20px;
+  text-align: right;
+  padding: 8px 0;
+}
+
+#expr::placeholder,
+#expression::placeholder {
+  color: #a3b7d9;
+}
+
+#out,
+#result {
+  min-height: 46px;
+  margin-top: 8px;
+  color: #2d9d83;
+  font-size: clamp(28px, 7vw, 38px);
+  font-weight: 900;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+#deg,
+#angle,
+.small-actions button {
+  background: #dff3ff;
+  color: #3c6eaa;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.keys,
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.keys button,
+.keypad .key {
+  min-width: 0;
+  min-height: 55px;
+  border-radius: 16px;
+  background: #f2f5ff;
+  color: #405579;
+  font-size: 21px;
+  font-weight: 900;
+  box-shadow: 0 3px 0 #dce5f5;
+}
+
+/* Các phím số luân phiên màu pastel */
+.keys button:nth-child(4n + 1),
+.keypad .key:nth-child(4n + 1) {
+  background: #ffe2dc;
+  color: #b95348;
+  box-shadow: 0 3px 0 #f7c4bb;
+}
+
+.keys button:nth-child(4n + 2),
+.keypad .key:nth-child(4n + 2) {
+  background: #fff0c7;
+  color: #89621b;
+  box-shadow: 0 3px 0 #f2dfa7;
+}
+
+.keys button:nth-child(4n + 3),
+.keypad .key:nth-child(4n + 3) {
+  background: #dff7e8;
+  color: #287b58;
+  box-shadow: 0 3px 0 #bfe9d0;
+}
+
+.keys button:nth-child(4n),
+.keypad .key:nth-child(4n) {
+  background: #e4eaff;
+  color: #4b61ba;
+  box-shadow: 0 3px 0 #cbd6ff;
+}
+
+/* Phím phép tính */
+.op,
+.key.op {
+  background: #dceaff !important;
+  color: #4169cb !important;
+  box-shadow: 0 3px 0 #c0d5ff !important;
+}
+
+/* Phím xóa */
+.danger,
+.key.danger {
+  background: #ffdae4 !important;
+  color: #b84162 !important;
+  box-shadow: 0 3px 0 #f4bdcd !important;
+}
+
+/* Phím bằng nổi bật */
+.equal,
+.key.equal {
+  background: #ff9b78 !important;
+  color: white !important;
+  box-shadow: 0 4px 0 #ed7958 !important;
+  font-size: 25px;
+}
+
+/* Phím chức năng khoa học */
+.science,
+.scientific {
+  display: none;
+  margin-bottom: 12px;
+}
+
+.science.show,
+.scientific.visible {
+  display: block;
+}
+
+.science .keys,
+.scientific .keypad {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.science button,
+.scientific .key {
+  min-height: 43px;
+  padding: 7px 2px;
+  font-size: 13px;
+  border-radius: 11px;
+  background: #eee7ff !important;
+  color: #7255b8 !important;
+  box-shadow: 0 3px 0 #d9cdf8 !important;
+}
+
+.wide,
+.zero {
+  grid-column: span 2;
+}
+
+#history,
+.history {
+  margin-top: 18px;
+  border-top: 2px dashed #dce7fa;
+  padding-top: 12px;
+  color: #6a80a6;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.history-item {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 6px;
+  border-radius: 12px;
+  background: #f0f7ff;
+  color: #49648f;
+  text-align: left;
+}
+
+.footer,
+.subtitle {
+  color: #91a2c0;
+  font-size: 11px;
+  text-align: center;
+  margin-top: 12px;
+}
+
+@media (max-width: 400px) {
+  body {
+    padding: 10px 7px;
+    align-items: flex-start;
+  }
+
+  .calc,
+  .app {
+    padding: 13px;
+    border-radius: 21px;
+  }
+
+  .keys,
+  .keypad {
+    gap: 7px;
+  }
+
+  .keys button,
+  .keypad .key {
+    min-height: 49px;
+    font-size: 18px;
+  }
+}
+</style>
+</head>
+<body>
+
+
+<div class="tabs" id="dashboardTabs">
+  <a class="tab" data-tab="lookup" href="index.html">Tra cứu XML</a>
+  <a class="tab" data-tab="calculate" href="#">Máy tính</a>
+</div>
+<br>
+
+<div class="calc">
+<h2>Máy tính Online</h2>
+
+<div class="modes">
+<button id="basic" class="active" onclick="mode(false)">Cơ bản</button>
+<button id="advanced" onclick="mode(true)">Khoa học</button>
+</div>
+
+<div class="screen">
+<input id="expr" placeholder="Nhập biểu thức..." autocomplete="off">
+<div id="out">0</div>
+<div style="display:flex;justify-content:space-between;margin-top:8px">
+<button onclick="angle()" id="deg" style="padding:7px 12px">DEG</button>
+<button onclick="copyResult()" style="padding:7px 12px">Sao chép</button>
+</div>
+</div>
+
+<div class="science" id="science">
+<div class="keys">
+<button onclick="put('sin(')">sin</button>
+<button onclick="put('cos(')">cos</button>
+<button onclick="put('tan(')">tan</button>
+<button onclick="put('asin(')">sin⁻¹</button>
+<button onclick="put('acos(')">cos⁻¹</button>
+<button onclick="put('atan(')">tan⁻¹</button>
+<button onclick="put('log(')">log</button>
+<button onclick="put('ln(')">ln</button>
+<button onclick="put('sqrt(')">√</button>
+<button onclick="put('cbrt(')">∛</button>
+<button onclick="put('abs(')">abs</button>
+<button onclick="put('exp(')">exp</button>
+<button onclick="put('pi')">π</button>
+<button onclick="put('e')">e</button>
+<button onclick="put('^')">xʸ</button>
+<button onclick="put('!')">n!</button>
+<button onclick="put('^2')">x²</button>
+<button onclick="put('^3')">x³</button>
+<button onclick="put('(')">(</button>
+<button onclick="put(')')">)</button>
+</div>
+</div>
+
+<div class="keys">
+<button class="danger" onclick="clearAll()">AC</button>
+<button class="danger" onclick="back()">⌫</button>
+<button class="op" onclick="put('%')">%</button>
+<button class="op" onclick="put('/')">÷</button>
+
+<button onclick="put('7')">7</button>
+<button onclick="put('8')">8</button>
+<button onclick="put('9')">9</button>
+<button class="op" onclick="put('*')">×</button>
+
+<button onclick="put('4')">4</button>
+<button onclick="put('5')">5</button>
+<button onclick="put('6')">6</button>
+<button class="op" onclick="put('-')">−</button>
+
+<button onclick="put('1')">1</button>
+<button onclick="put('2')">2</button>
+<button onclick="put('3')">3</button>
+<button class="op" onclick="put('+')">+</button>
+
+<button onclick="put('(')">(</button>
+<button onclick="put('0')">0</button>
+<button onclick="put('.')">.</button>
+<button class="equal" onclick="calculate()">=</button>
+
+<button class="wide" onclick="put('Ans')">Ans</button>
+<button class="wide" onclick="put('^')">Lũy thừa</button>
+</div>
+
+<div style="display:flex;justify-content:space-between;margin-top:18px">
+<strong>Lịch sử tính toán</strong>
+<button onclick="clearHistory()" style="padding:6px 10px;font-size:12px">Xóa</button>
+</div>
+<div id="history"></div>
+</div>
+
+<script>
+const expr=document.getElementById('expr');
+const out=document.getElementById('out');
+let rad=false,ans=0,done=false,records=[];
+
+function mode(on){
+ document.getElementById('science').classList.toggle('show',on);
+ document.getElementById('basic').classList.toggle('active',!on);
+ document.getElementById('advanced').classList.toggle('active',on);
+}
+
+function angle(){
+ rad=!rad;
+ document.getElementById('deg').textContent=rad?'RAD':'DEG';
+ preview();
+}
+
+function put(s){
+ if(done && /^[0-9.]$/.test(s)) expr.value='';
+ else if(done && s==='Ans') expr.value='';
+ expr.value+=s;
+ done=false;
+ expr.focus();
+ preview();
+}
+
+function clearAll(){
+ expr.value='';
+ out.textContent='0';
+ done=false;
+ expr.focus();
+}
+
+function back(){
+ expr.value=expr.value.slice(0,-1);
+ done=false;
+ preview();
+}
+
+function factorial(n){
+ if(n<0||!Number.isInteger(n)||n>170)
+ throw Error('Giai thừa cần số nguyên từ 0 đến 170');
+ let r=1;
+ for(let i=2;i<=n;i++)r*=i;
+ return r;
+}
+
+// Chỉ cho phép biểu thức toán học, không thực thi mã tùy ý.
+function calculateValue(source){
+ let s=source.replace(/π/g,'pi')
+ .replace(/×/g,'*').replace(/÷/g,'/')
+ .replace(/\s+/g,'');
+
+ if(!s)throw Error('Hãy nhập biểu thức');
+ if(!/^[0-9a-zA-Z_+\-*/^().,!%]+$/.test(s))
+ throw Error('Biểu thức chứa ký tự không hợp lệ');
+
+ // Chuyển cú pháp hiển thị thành biểu thức JavaScript.
+ s=s.replace(/\bAns\b/gi,'ANS')
+ .replace(/\bpi\b/gi,'PI')
+ .replace(/\be\b/g,'E')
+ .replace(/\^/g,'**');
+
+ // Xử lý hàm giai thừa hậu tố.
+ s=s.replace(/(\d+(?:\.\d+)?|\))!/g,'fact($1)');
+
+ // Phần trăm dạng số đơn giản.
+ s=s.replace(/(\d+(?:\.\d+)?)%/g,'($1/100)');
+
+ const names=['sin','cos','tan','asin','acos','atan',
+ 'sqrt','cbrt','log','ln','abs','exp','min','max','round',
+ 'floor','ceil','fact'];
+
+ const vars={
+ PI:Math.PI,E:Math.E,ANS:ans,
+ sin:x=>Math.sin(rad?x:x*Math.PI/180),
+ cos:x=>Math.cos(rad?x:x*Math.PI/180),
+ tan:x=>Math.tan(rad?x:x*Math.PI/180),
+ asin:x=>Math.asin(x)*(rad?1:180/Math.PI),
+ acos:x=>Math.acos(x)*(rad?1:180/Math.PI),
+ atan:x=>Math.atan(x)*(rad?1:180/Math.PI),
+ sqrt:Math.sqrt,cbrt:Math.cbrt,
+ log:Math.log10,ln:Math.log,abs:Math.abs,exp:Math.exp,
+ min:Math.min,max:Math.max,round:Math.round,
+ floor:Math.floor,ceil:Math.ceil,fact:factorial
+ };
+
+ // Parser toán học giới hạn: không dùng eval hoặc Function.
+ const tokens=s.match(/[A-Za-z_]+|(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?|[()+\-*/%,!]/gi)||[];
+ if(tokens.join('')!==s.replace(/\*\*/g,'^'))
+ throw Error('Không đọc được biểu thức');
+
+ let i=0;
+ function peek(){return tokens[i]}
+ function take(){return tokens[i++]}
+
+ function primary(){
+  let t=take();
+  if(t==='+' )return unary();
+  if(t==='-')return -unary();
+  if(t==='('){
+   let v=add();
+   if(take()!==')')throw Error('Thiếu dấu )');
+   return v;
+  }
+  if(!t)throw Error('Thiếu số');
+  if(/^(?:\d|\.)/.test(t))return Number(t);
+  if(t in vars){
+   if(typeof vars[t]==='number')return vars[t];
+   if(take()!=='(')throw Error('Thiếu dấu (');
+   let args=[add()];
+   while(peek()===','){take();args.push(add())}
+   if(take()!==')')throw Error('Thiếu dấu )');
+   if(!names.includes(t))throw Error('Hàm không hợp lệ');
+   return vars[t](...args);
+  }
+  throw Error('Hàm hoặc biến không hợp lệ: '+t);
+ }
+ function unary(){return primary()}
+ function power(){
+  let a=primary();
+  if(peek()==='^'){take();a=Math.pow(a,unary())}
+  return a;
+ }
+ function mul(){
+  let a=power();
+  while(peek()==='*'||peek()==='/'){
+   let op=take(),b=power();
+   if(op==='/'&&b===0)throw Error('Không thể chia cho 0');
+   a=op==='*'?a*b:a/b;
+  }
+  return a;
+ }
+ function add(){
+  let a=mul();
+  while(peek()==='+'||peek()==='-'){
+   let op=take(),b=mul();
+   a=op==='+'?a+b:a-b;
+  }
+  return a;
+ }
+
+ // Chuẩn hóa tên hàm và hằng số sang chữ thường cho parser.
+ s=s.replace(/\*\*/g,'^');
+ // Sử dụng parser riêng dưới đây với token chuẩn hóa.
+ i=0;
+ let value=add();
+ if(i!==tokens.length)throw Error('Sai cú pháp');
+ if(!Number.isFinite(value))throw Error('Kết quả không xác định');
+ return value;
+}
+
+function safeCalculate(source){
+ // Bộ tính dùng parser biểu thức nhỏ, không thực thi mã tùy ý.
+ let s=source.replace(/π/g,'pi').replace(/×/g,'*')
+ .replace(/÷/g,'/').replace(/\s+/g,'');
+ s=s.replace(/\bAns\b/gi,'ans');
+ const tokenPattern=/\d+(?:\.\d*)?(?:e[+-]?\d+)?|\.\d+|[a-zA-Z]+|[()+\-*/^,!%]/gi;
+ const tokens=s.match(tokenPattern)||[];
+ if(tokens.join('')!==s)throw Error('Sai cú pháp');
+ let p=0;
+ function peek(){return tokens[p]}
+ function take(){return tokens[p++]}
+ function expression(){
+  let x=term();
+  while(peek()==='+'||peek()==='-'){
+   let op=take(),y=term();x=op==='+'?x+y:x-y;
+  }
+  return x;
+ }
+ function term(){
+  let x=unary();
+  while(peek()==='*'||peek()==='/'){
+   let op=take(),y=unary();
+   if(op==='/'&&y===0)throw Error('Không thể chia cho 0');
+   x=op==='*'?x*y:x/y;
+  }
+  return x;
+ }
+ function unary(){
+  if(peek()==='+'){take();return unary()}
+  if(peek()==='-'){take();return -unary()}
+  return power();
+ }
+ function power(){
+  let x=postfix();
+  if(peek()==='^'){take();x=Math.pow(x,unary())}
+  return x;
+ }
+ function postfix(){
+  let x=primary();
+  while(peek()==='!'||peek()==='%'){
+   let op=take();
+   if(op==='!')x=factorial(x);else x/=100;
+  }
+  return x;
+ }
+ function primary(){
+  let t=take();
+  if(t==='('){
+   let x=expression();
+   if(take()!==')')throw Error('Thiếu dấu )');
+   return x;
+  }
+  if(t===undefined)throw Error('Thiếu số');
+  if(/^(?:\d|\.)/.test(t))return Number(t);
+  if(/^[a-z]+$/i.test(t)){
+   let n=t.toLowerCase();
+   const constants={pi:Math.PI,e:Math.E,ans:ans};
+   if(n in constants)return constants[n];
+   const funcs={
+    sin:x=>Math.sin(rad?x:x*Math.PI/180),
+    cos:x=>Math.cos(rad?x:x*Math.PI/180),
+    tan:x=>Math.tan(rad?x:x*Math.PI/180),
+    asin:x=>Math.asin(x)*(rad?1:180/Math.PI),
+    acos:x=>Math.acos(x)*(rad?1:180/Math.PI),
+    atan:x=>Math.atan(x)*(rad?1:180/Math.PI),
+    sqrt:Math.sqrt,cbrt:Math.cbrt,
+    log:Math.log10,ln:Math.log,abs:Math.abs,exp:Math.exp,
+    round:Math.round,floor:Math.floor,ceil:Math.ceil,
+    min:Math.min,max:Math.max
+   };
+   if(!(n in funcs))throw Error('Hàm không hợp lệ: '+n);
+   if(take()!=='(')throw Error('Thiếu dấu (');
+   let args=[expression()];
+   while(peek()===','){take();args.push(expression())}
+   if(take()!==')')throw Error('Thiếu dấu )');
+   if(!['min','max'].includes(n)&&args.length!==1)
+   throw Error('Hàm cần một tham số');
+   return funcs[n](...args);
+  }
+  throw Error('Biểu thức không hợp lệ');
+ }
+ const value=expression();
+ if(p!==tokens.length)throw Error('Kiểm tra lại biểu thức');
+ if(!Number.isFinite(value))throw Error('Kết quả không xác định');
+ return value;
+}
+
+function preview(){
+ if(!expr.value.trim()){out.textContent='0';return}
+ try{
+  out.textContent=Number(safeCalculate(expr.value).toPrecision(12)).toString();
+ }catch(e){out.textContent='…'}
+}
+
+function calculate(){
+ try{
+  let v=safeCalculate(expr.value);
+  ans=v;
+  out.textContent=Number(v.toPrecision(12)).toString();
+  records.unshift(expr.value+' = '+out.textContent);
+  records=records.slice(0,30);
+  document.getElementById('history').textContent=records.join('\n');
+  document.getElementById('history').style.whiteSpace='pre-line';
+  done=true;
+ }catch(e){out.textContent=e.message}
+}
+
+function clearHistory(){
+ records=[];
+ document.getElementById('history').textContent='';
+}
+
+async function copyResult(){
+ try{await navigator.clipboard.writeText(out.textContent)}
+ catch(e){out.textContent=out.textContent}
+}
+
+expr.addEventListener('input',()=>{done=false;preview()});
+expr.addEventListener('keydown',e=>{
+ if(e.key==='Enter'||e.key==='='){e.preventDefault();calculate()}
+ if(e.key==='Escape')clearAll();
+});
+document.addEventListener('keydown',e=>{
+ if(document.activeElement===expr||e.ctrlKey||e.altKey||e.metaKey)return;
+ if(/^[0-9.+\-*/^()%!]$/.test(e.key))put(e.key);
+ if(e.key==='Enter')calculate();
+ if(e.key==='Backspace')back();
+ if(e.key==='Escape')clearAll();
+});
+
+/* ===DASHBOARD TAB ACTIVE=== */
+(function(){
+  const tabs = document.querySelectorAll('.tab');
+  const params = new URLSearchParams(window.location.search);
+
+  // Mặc định tab hóa đơn
+  let activeTab = 'calculate';
+
+  // Nếu sau này bạn muốn phân tab theo param
+  if(params.get('page')){
+    activeTab = params.get('page');
+  }
+
+  tabs.forEach(t=>{
+    if(t.dataset.tab === activeTab){
+      t.classList.add('active');
+    }
+  });
+})();
+/* ===END DASHBOARD TAB ACTIVE=== */
+
+</script>
+</body>
+</html>
