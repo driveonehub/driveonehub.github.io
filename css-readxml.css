@@ -1,0 +1,261 @@
+﻿body{
+    font-family: Tahoma, Arial, sans-serif;
+    font-size:14px;
+    margin:10px;
+    padding: 0 10px 10px;
+    line-height:1.1;
+    color:#111;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Hiệu ứng hai cạnh dọc, bắt đầu dưới hàng tab */
+body::before {
+    content: "";
+    position: absolute;
+    top: 35px; /* Điều chỉnh vị trí bắt đầu */
+    left: 0px;
+    right: 0px;
+    bottom: 0;
+    z-index: -1;
+    pointer-events: none;
+    border-left: 2px solid #53edc9;
+    border-right: 2px solid #53edc9;
+    border-bottom: 2px solid #53edc9;
+    border-radius: 0 0 14px 14px;
+    box-shadow:
+        inset 8px 0 8px -8px #53edc9,
+        inset -8px 0 8px -8px #53edc9,
+        inset 0 -8px 8px -8px #53edc9;
+    box-sizing: border-box;
+
+    /* dùng hiệu ứng này hoặc box-shadow */
+    /background:
+        linear-gradient(to right,
+            #53edc9 0,
+            transparent 10px
+        ) left top / 10px 100% no-repeat,
+        linear-gradient(to left,
+            #53edc9 0,
+            transparent 10px
+        ) right top / 10px 100% no-repeat;
+}
+
+a{
+    text-decoration:none;
+    color:#0066cc;
+}
+a:hover{color:#003366}
+.block{
+    border:1px solid #d6d6d6;
+    border-radius:10px;
+    background:#f7f7f7;
+    padding:12px 15px;
+    margin-top:15px;
+    box-shadow:0 2px 5px rgba(0,0,0,0.05);
+}
+.copy-btn{
+  margin-left:8px;
+  padding:2px 8px;
+  font-size:12px;
+  cursor:pointer;
+  border:1px solid #ccc;
+  border-radius:4px;
+  background:#f5f5f5;
+}
+.copy-btn:hover{
+  background:#e0e0e0;
+}
+.file-name{
+  cursor:pointer;
+}
+ 
+/* ===== DASHBOARD TABS ===== */
+.tabs{
+  display:flex;
+  justify-content: flex-start;
+  align-self: stretch;
+  width: calc(100% + 20px);
+  margin-left: -10px;
+  gap:6px;
+  margin-bottom:16px;
+  border-bottom: 2px solid #469ee8;
+  padding-bottom: 0px;
+}
+.tab{
+  padding:8px 26px;
+  background:#e3f2fd;
+  border-radius:8px 8px 0 0;
+  text-decoration:none;
+  color:#045;
+  font-weight:600;
+  transition:all .25s ease;
+  border:1px solid #bbdefb;
+}
+.tab:hover{
+  background:#fa8964;
+}
+.tab.active{
+  background:linear-gradient(135deg,#63f731,#ffffff);
+  color:#003;
+  border-bottom:1px solid #f0fa64;
+}
+/* ===== END DASHBOARD TABS ===== */
+
+/* ===== EDIT MST, MTC ===== */
+.edit-btn{
+  border:0;
+  background:none;
+  cursor:pointer;
+  color:#777;
+  font-size:14px;
+  margin-left:4px;
+}
+
+.edit-btn:hover{
+  color:#06c;
+}
+.mst-edit-wrap{
+  display:inline-flex;
+  position:relative;
+  align-items:center;
+}
+
+.mst-tcgp-input{
+  width:140px;
+  padding:2px 24px 2px 5px;
+  font-size:14px;
+  color:#000;
+  background:#fff;
+  border:1px solid #999;
+  box-sizing:border-box;
+}
+
+.mst-dropdown-btn{
+  position:absolute;
+  right:1px;
+  top:1px;
+  width:22px;
+  height:calc(100% - 2px);
+  border:0;
+  background:#fff;
+  color:#555;
+  cursor:pointer;
+  padding:0;
+  font-size:12px;
+}
+
+.mst-dropdown-btn:hover{
+  background:#eee;
+  color:#000;
+}
+
+.mst-suggest{
+  position:absolute;
+  left:0;
+  top:100%;
+  z-index:9999;
+  width:280px;
+  max-height:220px;
+  overflow-y:auto;
+  background:#fff;
+  border:1px solid #aaa;
+  box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+
+.mst-suggest-item{
+  padding:6px 8px;
+  cursor:pointer;
+  color:#000;
+  background:#fff;
+}
+
+.mst-suggest-item:hover{
+  background:#eee;
+}
+
+.mst-reset-btn{
+  border:0;
+  background:none;
+  cursor:pointer;
+  color:#c00;
+  font-size:12px;
+  margin-left:5px;
+}
+
+.mst-reset-btn:hover{
+  text-decoration:underline;
+}
+
+.matc-edit-wrap{
+  display:inline-flex;
+  position:relative;
+  align-items:center;
+}
+
+.matc-input{
+  width:140px;
+  padding:2px 24px 2px 5px;
+  font-size:14px;
+  color:#000;
+  background:#fff;
+  border:1px solid #999;
+  box-sizing:border-box;
+}
+
+.matc-dropdown-btn{
+  position:absolute;
+  right:1px;
+  top:1px;
+  width:22px;
+  height:calc(100% - 2px);
+  border:0;
+  background:#fff;
+  color:#555;
+  cursor:pointer;
+  padding:0;
+  font-size:12px;
+}
+
+.matc-dropdown-btn:hover{
+  background:#eee;
+  color:#000;
+}
+
+.matc-suggest{
+  position:absolute;
+  left:0;
+  top:100%;
+  z-index:9999;
+  width:280px;
+  max-height:220px;
+  overflow-y:auto;
+  background:#fff;
+  border:1px solid #aaa;
+  box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+
+.matc-suggest-item{
+  padding:6px 8px;
+  cursor:pointer;
+  color:#000;
+  background:#fff;
+}
+
+.matc-suggest-item:hover{
+  background:#eee;
+}
+
+.matc-reset-btn{
+  border:0;
+  background:none;
+  cursor:pointer;
+  color:#c00;
+  font-size:12px;
+  margin-left:5px;
+}
+
+.matc-reset-btn:hover{
+  text-decoration:underline;
+}
+/* ===== END MST, MTC ===== */
