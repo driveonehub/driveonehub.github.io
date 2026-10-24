@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -30,18 +29,21 @@ html {
 
 /* ===== DASHBOARD TABS ===== */
 .tabs{
-  display:flex;
-  justify-content: flex-start;
-  align-self: stretch;
-  width: 100%;
-  gap:6px;
-  margin-bottom:14px;
   font-family: Tahoma, Arial, sans-serif;
   font-size:14px;
   line-height:1.1;
+  display:flex;
+  justify-content: flex-start;
+  align-self: stretch;
+  width: calc(100% + 60px);
+  margin-left: -30px;
+  gap:6px;
+  margin-bottom:16px;
+  border-bottom: 2px solid #469ee8;
+  padding-bottom: 0px;
 }
 .tab{
-  padding:8px 16px;
+  padding:8px 26px;
   background:#e3f2fd;
   border-radius:8px 8px 0 0;
   text-decoration:none;
@@ -64,17 +66,52 @@ html {
 body {
   margin: 10px;
   min-height: 100vh;
-  padding: 0px 0px;
+  padding: 0px 30px 30px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
+  position: relative;
 
   /* Nền trong suốt */
   background: none;
 
   color: var(--text);
-  font-family: "Trebuchet MS", Arial, sans-serif;
+  /font-family: "Trebuchet MS", Arial, sans-serif;
+  font-family: Tahoma, Arial, sans-serif;
+
+}
+
+/* Hiệu ứng hai cạnh dọc, bắt đầu dưới hàng tab */
+body::before {
+    content: "";
+    position: absolute;
+    top: 35px; /* Điều chỉnh vị trí bắt đầu */
+    left: 0px;
+    right: 0px;
+    bottom: 0;
+    z-index: -1;
+    pointer-events: none;
+    border-left: 2px solid #53edc9;
+    border-right: 2px solid #53edc9;
+    border-bottom: 2px solid #53edc9;
+    border-radius: 0 0 14px 14px;
+    box-shadow:
+        inset 8px 0 8px -8px #53edc9,
+        inset -8px 0 8px -8px #53edc9,
+        inset 0 -8px 8px -8px #53edc9;
+    box-sizing: border-box;
+
+    /* dùng hiệu ứng này hoặc box-shadow */
+    /background:
+        linear-gradient(to right,
+            #53edc9 0,
+            transparent 10px
+        ) left top / 10px 100% no-repeat,
+        linear-gradient(to left,
+            #53edc9 0,
+            transparent 10px
+        ) right top / 10px 100% no-repeat;
 }
 
 button,

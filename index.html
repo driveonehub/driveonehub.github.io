@@ -10,9 +10,45 @@ body{
     font-family: Tahoma, Arial, sans-serif;
     font-size:14px;
     margin:10px;
+    padding: 0 10px 10px;
     line-height:1.1;
     color:#111;
+    min-height: 100vh;
+    position: relative;
 }
+
+/* Hiệu ứng hai cạnh dọc, bắt đầu dưới hàng tab */
+body::before {
+    content: "";
+    position: absolute;
+    top: 35px; /* Điều chỉnh vị trí bắt đầu */
+    left: 0px;
+    right: 0px;
+    bottom: 0;
+    z-index: -1;
+    pointer-events: none;
+    border-left: 2px solid #53edc9;
+    border-right: 2px solid #53edc9;
+    border-bottom: 2px solid #53edc9;
+    border-radius: 0 0 14px 14px;
+    box-shadow:
+        inset 8px 0 8px -8px #53edc9,
+        inset -8px 0 8px -8px #53edc9,
+        inset 0 -8px 8px -8px #53edc9;
+    box-sizing: border-box;
+
+    /* dùng hiệu ứng này hoặc box-shadow */
+    /background:
+        linear-gradient(to right,
+            #53edc9 0,
+            transparent 10px
+        ) left top / 10px 100% no-repeat,
+        linear-gradient(to left,
+            #53edc9 0,
+            transparent 10px
+        ) right top / 10px 100% no-repeat;
+}
+
 a{
     text-decoration:none;
     color:#0066cc;
@@ -47,12 +83,15 @@ a:hover{color:#003366}
   display:flex;
   justify-content: flex-start;
   align-self: stretch;
-  width: 100%;
+  width: calc(100% + 20px);
+  margin-left: -10px;
   gap:6px;
-  margin-bottom:14px;
+  margin-bottom:16px;
+  border-bottom: 2px solid #469ee8;
+  padding-bottom: 0px;
 }
 .tab{
-  padding:8px 16px;
+  padding:8px 26px;
   background:#e3f2fd;
   border-radius:8px 8px 0 0;
   text-decoration:none;
