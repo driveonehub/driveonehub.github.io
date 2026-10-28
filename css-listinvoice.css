@@ -76,7 +76,7 @@ table {
 
 /* Tinh chỉnh lại border của các ô bên trong bảng cho liền mạch */
 th, td {
-    border: 1px solid #333;
+    border: 1px solid #666;
     padding: 6px;
 }
 
