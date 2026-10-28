@@ -61,7 +61,7 @@ a{text-decoration:none}
 .table-container {
     width: 100%;
     overflow-x: auto; /* Cho phép cuộn ngang trên điện thoại nếu bảng quá dài */
-    border: 1px solid #999;
+    border: 1px solid #666;
     border-radius: 12px; /* Độ bo tròn 4 góc khung bảng */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     margin-top: 10px;
@@ -76,7 +76,7 @@ table {
 
 /* Tinh chỉnh lại border của các ô bên trong bảng cho liền mạch */
 th, td {
-    border: 1px solid #000;
+    border: 1px solid #333;
     padding: 6px;
 }
 
