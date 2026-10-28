@@ -1,0 +1,145 @@
+﻿body{
+    font-family: Tahoma, Arial, sans-serif;
+    font-size:14px;
+    margin:10px;
+    padding: 0 10px 10px;
+    line-height:1.1;
+    color:#111;
+    min-height: calc(100vh - 30px);
+    position: relative;
+}
+
+/* Hiệu ứng hai cạnh dọc, bắt đầu dưới hàng tab */
+body::before {
+    content: "";
+    position: absolute;
+    top: 35px; /* Điều chỉnh vị trí bắt đầu */
+    left: 0px;
+    right: 0px;
+    bottom: 0;
+    z-index: -1;
+    pointer-events: none;
+    border-left: 2px solid #53edc9;
+    border-right: 2px solid #53edc9;
+    border-bottom: 2px solid #53edc9;
+    border-radius: 0 0 14px 14px;
+    box-shadow:
+        inset 8px 0 8px -8px #53edc9,
+        inset -8px 0 8px -8px #53edc9,
+        inset 0 -8px 8px -8px #53edc9;
+    box-sizing: border-box;
+
+    /* dùng hiệu ứng này hoặc box-shadow */
+    /background:
+        linear-gradient(to right,
+            #53edc9 0,
+            transparent 10px
+        ) left top / 10px 100% no-repeat,
+        linear-gradient(to left,
+            #53edc9 0,
+            transparent 10px
+        ) right top / 10px 100% no-repeat;
+}
+
+@media print{
+  body{
+    font-family: "Times New Roman", serif;
+    font-size:13pt;
+  }
+}
+table{border-collapse:collapse;width:100%;}
+th,td{border:1px solid #999;padding:6px}
+th{text-align:center;background:#f0f0f0}
+td.number,th.number{text-align:right}
+tr.nodata{background:#f8ebf7}
+tbody tr:hover{background:#defaf9}
+tfoot{display:none;} /* Ẩn khi chưa load dữ liệu, hiện lại trong render*/
+.controls{margin-bottom:10px;display:flex;gap:10px;align-items:center}
+a{text-decoration:none}
+
+/* Khung bọc ngoài bảng để bo tròn 4 góc hoàn hảo */
+.table-container {
+    width: 100%;
+    overflow-x: auto; /* Cho phép cuộn ngang trên điện thoại nếu bảng quá dài */
+    border: 1px solid #999;
+    border-radius: 12px; /* Độ bo tròn 4 góc khung bảng */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-top: 10px;
+}
+
+/* Đảm bảo bảng bên trong lấp đầy và khớp viền */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    border: none; /* Bỏ viền ngoài của table để dùng viền của container */
+}
+
+/* Tinh chỉnh lại border của các ô bên trong bảng cho liền mạch */
+th, td {
+    border: 1px solid #000;
+    padding: 6px;
+}
+
+/* Bo góc cho hàng tiêu chuẩn phía trên cùng (Header) khớp với khung */
+thead tr:first-child th:first-child {
+    border-top-left-radius: 11px;
+}
+thead tr:first-child th:last-child {
+    border-top-right-radius: 11px;
+}
+
+/* Bo góc cho hàng cuối cùng (Footer hoặc dòng cuối tbody) khớp với khung */
+tfoot tr:last-child th:first-child,
+tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 11px;
+}
+tfoot tr:last-child th:last-child,
+tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 11px;
+}
+
+/* Giới hạn cột "Web tra cứu, Fkey" (cột số 7) tối đa 18% chiều rộng bảng */
+.col-web {
+    width: 16%;
+    max-width: 18%;
+    word-break: break-word;
+    overflow: hidden;
+}
+.col-fkey {
+    width: 12%;
+    max-width: 15%;
+    word-break: break-word;
+    overflow: hidden;
+}
+
+/* ===== DASHBOARD TABS ===== */
+.tabs{
+  display:flex;
+  justify-content: flex-start;
+  align-self: stretch;
+  width: calc(100% + 20px);
+  margin-left: -10px;
+  gap:6px;
+  margin-bottom:16px;
+  border-bottom: 2px solid #469ee8;
+  padding-bottom: 0px;
+}
+.tab{
+  padding:8px 26px;
+  background:#e3f2fd;
+  border-radius:8px 8px 0 0;
+  text-decoration:none;
+  color:#045;
+  font-weight:600;
+  transition:all .25s ease;
+  border:1px solid #bbdefb;
+}
+.tab:hover{
+  background:#fa8964;
+}
+.tab.active{
+  background:linear-gradient(135deg,#63f731,#ffffff);
+  color:#003;
+  border-bottom:1px solid #f0fa64;
+}
+/* ===== END DASHBOARD TABS ===== */
