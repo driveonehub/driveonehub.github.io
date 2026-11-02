@@ -65,7 +65,7 @@ html {
 
 
 body {
-  margin: 10px;
+  margin: 10px auto;
   min-height: 100vh;
   padding: 0px 30px 30px;
   display: flex;
@@ -73,6 +73,10 @@ body {
   justify-content: flex-start;
   align-items: stretch;
   position: relative;
+  /* Giới hạn chiều ngang giao diện */
+  max-width: 1200px; 
+  width: 95%;        
+  box-sizing: border-box;
 
   /* Nền trong suốt */
   background: none;

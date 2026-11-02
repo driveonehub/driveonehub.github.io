@@ -1,12 +1,16 @@
 ﻿body{
     font-family: Tahoma, Arial, sans-serif;
     font-size:14px;
-    margin:10px;
+    margin:10px auto;
     padding: 0 10px 10px;
     line-height:1.1;
     color:#111;
-    min-height: calc(100vh - 30px);
+    min-height: calc(100vh - 20px);
     position: relative;
+    /* Giới hạn chiều ngang giao diện */
+    max-width: 1200px; 
+    width: 95%;        
+    box-sizing: border-box;
 }
 
 /* Hiệu ứng hai cạnh dọc, bắt đầu dưới hàng tab */
