@@ -628,7 +628,10 @@ let hashCounter = 0;
 document
 .getElementById("folder1")
 .addEventListener("change", function(){
-    files1 = Array.from(this.files);
+    files1 = Array.from(this.files).filter(file => {
+        const fileName = file.name.toLowerCase();
+        return fileName !== "desktop.ini" && fileName !== "thumbs.db";
+    });
     if(files1.length > 0){
         rootName1 =
             files1[0].webkitRelativePath
@@ -651,7 +654,10 @@ document
 document
 .getElementById("folder2")
 .addEventListener("change", function(){
-    files2 = Array.from(this.files);
+    files2 = Array.from(this.files).filter(file => {
+        const fileName = file.name.toLowerCase();
+        return fileName !== "desktop.ini" && fileName !== "thumbs.db";
+    });
     if(files2.length > 0){
         rootName2 =
             files2[0].webkitRelativePath
