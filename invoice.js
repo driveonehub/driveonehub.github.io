@@ -194,7 +194,7 @@ const year=document.getElementById('year');
 /* === INIT YEAR SELECT (AUTO)=== */
 (function initYearSelect(){
   const currentYear = new Date().getFullYear();
-  const startYear = 2021; // có thể đổi nếu muốn
+  const startYear = window.startYear ?? 2021; // có thể đổi nếu muốn
 
   year.innerHTML = `<option value="all">Chọn năm</option>`;
 
