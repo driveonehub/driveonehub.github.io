@@ -1,0 +1,397 @@
+﻿* {
+  box-sizing: border-box;
+}
+
+:root {
+  --text: #34456b;
+  --panel: #ffffff;
+  --screen: #f0f8ff;
+  --key: #ffffff;
+  --key-hover: #e8f2ff;
+  --accent: #ff8a65;
+  --accent2: #ff8a65;
+  --operator: #dceaff;
+  --danger: #ffe1e8;
+  --border: #dce7fa;
+}
+
+html {
+  min-height: 100%;
+  background: none;
+}
+
+/* ===== DASHBOARD TABS ===== */
+.tabs{
+  font-family: Tahoma, Arial, sans-serif;
+  font-size:14px;
+  line-height:1.1;
+  display:flex;
+  justify-content: flex-start;
+  align-self: stretch;
+  width: calc(100% + 60px);
+  margin-left: -30px;
+  gap:6px;
+  margin-bottom:16px;
+  border-bottom: 2px solid #469ee8;
+  padding-bottom: 0px;
+}
+.tab{
+  padding:8px 26px;
+  background:#e3f2fd;
+  border-radius:8px 8px 0 0;
+  text-decoration:none;
+  color:#045;
+  font-weight:600;
+  transition:all .25s ease;
+  border:1px solid #bbdefb;
+}
+.tab:hover{
+  background:#fa8964;
+}
+.tab.active{
+  background:linear-gradient(135deg,#63f731,#ffffff);
+  color:#003;
+  border-bottom:1px solid #f0fa64;
+}
+/* ===== END DASHBOARD TABS ===== */
+
+
+body {
+  margin: 10px auto;
+  min-height: 100vh;
+  padding: 0px 30px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  position: relative;
+  /* Giới hạn chiều ngang giao diện */
+  max-width: 1200px; 
+  width: 95%;        
+  box-sizing: border-box;
+
+  /* Nền trong suốt */
+  background: none;
+
+  color: var(--text);
+  /font-family: "Trebuchet MS", Arial, sans-serif;
+  font-family: Tahoma, Arial, sans-serif;
+
+}
+
+/* Hiệu ứng hai cạnh dọc, bắt đầu dưới hàng tab */
+body::before {
+    content: "";
+    position: absolute;
+    top: 35px; /* Điều chỉnh vị trí bắt đầu */
+    left: 0px;
+    right: 0px;
+    bottom: 0;
+    z-index: -1;
+    pointer-events: none;
+    border-left: 2px solid #53edc9;
+    border-right: 2px solid #53edc9;
+    border-bottom: 2px solid #53edc9;
+    border-radius: 0 0 14px 14px;
+    box-shadow:
+        inset 8px 0 8px -8px #53edc9,
+        inset -8px 0 8px -8px #53edc9,
+        inset 0 -8px 8px -8px #53edc9;
+    box-sizing: border-box;
+
+    /* dùng hiệu ứng này hoặc box-shadow */
+    /background:
+        linear-gradient(to right,
+            #53edc9 0,
+            transparent 10px
+        ) left top / 10px 100% no-repeat,
+        linear-gradient(to left,
+            #53edc9 0,
+            transparent 10px
+        ) right top / 10px 100% no-repeat;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  color: var(--text);
+  border: 2px solid transparent;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .12s, filter .12s, box-shadow .12s;
+}
+
+button:hover {
+  filter: brightness(.97);
+  box-shadow: 0 3px 8px #8da8d522;
+}
+
+button:active {
+  transform: scale(.95);
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid #70b7ff;
+  outline-offset: 3px;
+}
+
+.calc,
+.app {
+  width: 100%;
+  max-width: 460px;
+  padding: 20px;
+  background: #ffffff;
+  border: 3px solid #d9eaff;
+  border-radius: 26px;
+  box-shadow: 0 8px 0 #cbdcf5;
+}
+
+h2 {
+  text-align: center;
+  color: #5579df;
+  font-size: 25px;
+  font-weight: 900;
+  margin: 5px 0 18px;
+}
+
+.modes,
+.mode-switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.mode-switch {
+  display: flex;
+  padding: 4px;
+  border-radius: 14px;
+  background: #f0f5ff;
+}
+
+.modes button,
+.mode-switch button {
+  padding: 12px 6px;
+  border-radius: 13px;
+  background: #edf3ff;
+  color: #55709f;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.modes button.active,
+.mode-switch button.active {
+  background: #ffca68;
+  color: #65471b;
+}
+
+.screen {
+  background: #effaff;
+  border: 3px solid #d8f0ff;
+  padding: 16px;
+  border-radius: 20px;
+  margin-bottom: 15px;
+}
+
+#expr,
+#expression {
+  width: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: #5278d8;
+  font-size: 20px;
+  text-align: right;
+  padding: 8px 0;
+}
+
+#expr::placeholder,
+#expression::placeholder {
+  color: #a3b7d9;
+}
+
+#out,
+#result {
+  min-height: 46px;
+  margin-top: 8px;
+  color: #2d9d83;
+  font-size: clamp(28px, 7vw, 38px);
+  font-weight: 900;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+#deg,
+#angle,
+.small-actions button {
+  background: #dff3ff;
+  color: #3c6eaa;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.keys,
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.keys button,
+.keypad .key {
+  min-width: 0;
+  min-height: 55px;
+  border-radius: 16px;
+  background: #f2f5ff;
+  color: #405579;
+  font-size: 21px;
+  font-weight: 900;
+  box-shadow: 0 3px 0 #dce5f5;
+}
+
+/* Các phím số luân phiên màu pastel */
+.keys button:nth-child(4n + 1),
+.keypad .key:nth-child(4n + 1) {
+  background: #ffe2dc;
+  color: #b95348;
+  box-shadow: 0 3px 0 #f7c4bb;
+}
+
+.keys button:nth-child(4n + 2),
+.keypad .key:nth-child(4n + 2) {
+  background: #fff0c7;
+  color: #89621b;
+  box-shadow: 0 3px 0 #f2dfa7;
+}
+
+.keys button:nth-child(4n + 3),
+.keypad .key:nth-child(4n + 3) {
+  background: #dff7e8;
+  color: #287b58;
+  box-shadow: 0 3px 0 #bfe9d0;
+}
+
+.keys button:nth-child(4n),
+.keypad .key:nth-child(4n) {
+  background: #e4eaff;
+  color: #4b61ba;
+  box-shadow: 0 3px 0 #cbd6ff;
+}
+
+/* Phím phép tính */
+.op,
+.key.op {
+  background: #dceaff !important;
+  color: #4169cb !important;
+  box-shadow: 0 3px 0 #c0d5ff !important;
+}
+
+/* Phím xóa */
+.danger,
+.key.danger {
+  background: #ffdae4 !important;
+  color: #b84162 !important;
+  box-shadow: 0 3px 0 #f4bdcd !important;
+}
+
+/* Phím bằng nổi bật */
+.equal,
+.key.equal {
+  background: #ff9b78 !important;
+  color: white !important;
+  box-shadow: 0 4px 0 #ed7958 !important;
+  font-size: 25px;
+}
+
+/* Phím chức năng khoa học */
+.science,
+.scientific {
+  display: none;
+  margin-bottom: 12px;
+}
+
+.science.show,
+.scientific.visible {
+  display: block;
+}
+
+.science .keys,
+.scientific .keypad {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.science button,
+.scientific .key {
+  min-height: 43px;
+  padding: 7px 2px;
+  font-size: 13px;
+  border-radius: 11px;
+  background: #eee7ff !important;
+  color: #7255b8 !important;
+  box-shadow: 0 3px 0 #d9cdf8 !important;
+}
+
+.wide,
+.zero {
+  grid-column: span 2;
+}
+
+#history,
+.history {
+  margin-top: 18px;
+  border-top: 2px dashed #dce7fa;
+  padding-top: 12px;
+  color: #6a80a6;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.history-item {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 6px;
+  border-radius: 12px;
+  background: #f0f7ff;
+  color: #49648f;
+  text-align: left;
+}
+
+.footer,
+.subtitle {
+  color: #91a2c0;
+  font-size: 11px;
+  text-align: center;
+  margin-top: 12px;
+}
+
+@media (max-width: 400px) {
+  body {
+    padding: 10px 7px;
+    align-items: flex-start;
+  }
+
+  .calc,
+  .app {
+    padding: 13px;
+    border-radius: 21px;
+  }
+
+  .keys,
+  .keypad {
+    gap: 7px;
+  }
+
+  .keys button,
+  .keypad .key {
+    min-height: 49px;
+    font-size: 18px;
+  }
+}
