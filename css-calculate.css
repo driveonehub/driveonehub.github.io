@@ -58,7 +58,7 @@ html {
 
 body {
   margin: 10px auto;
-  min-height: 100vh;
+  min-height: calc(100vh - 20px);
   padding: 0px 30px 30px;
   display: flex;
   flex-direction: column;
@@ -247,7 +247,7 @@ h2 {
 .keys button,
 .keypad .key {
   min-width: 0;
-  min-height: 55px;
+  min-height: 39px;
   border-radius: 16px;
   background: #f2f5ff;
   color: #405579;
@@ -330,7 +330,7 @@ h2 {
 
 .science button,
 .scientific .key {
-  min-height: 43px;
+  min-height: 33px;
   padding: 7px 2px;
   font-size: 13px;
   border-radius: 11px;
@@ -391,7 +391,7 @@ h2 {
 
   .keys button,
   .keypad .key {
-    min-height: 49px;
+    min-height: 39px;
     font-size: 18px;
   }
 }
