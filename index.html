@@ -19,6 +19,8 @@ body{
     max-width: 1200px; 
     width: 95%;        
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Hiệu ứng hai cạnh dọc, bắt đầu dưới hàng tab */
@@ -271,6 +273,22 @@ a:hover{color:#003366}
   text-decoration:underline;
 }
 /* ===== END MST, MTC ===== */
+
+/* ===== FOOTER ===== */
+#result {
+    flex: 1 0 auto;
+}
+
+.page-footer {
+    flex-shrink: 0;
+    margin-top: 10px;
+    padding: 8px;
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    border-top: 1px solid #53edc9;
+}
+/* ===== END FOOTER ===== */
     
 </style>
 </head>
@@ -1374,7 +1392,6 @@ function resetMaTCHdon(btn) {
   );
 }
 
-
 /* ===DASHBOARD TAB ACTIVE=== */
 (function(){
   const tabs = document.querySelectorAll('.tab');
@@ -1395,6 +1412,17 @@ function resetMaTCHdon(btn) {
   });
 })();
 /* ===END DASHBOARD TAB ACTIVE=== */
+
+/* ===== FOOTER ===== */
+(function () {
+    const footer = document.createElement("footer");
+    footer.className = "page-footer";
+    footer.innerHTML = `
+    Chương trình hổ trợ đọc và tra cứu hóa đơn XML TT78. Để thêm đơn vị mới, cập nhật tra cứu, liên hệ điện thoại/zalo: 0973886963, facebook: https://fb.com/ngocloi156
+    `;
+    document.body.appendChild(footer);
+})();
+/* ===== END FOOTER ===== */
     
 </script>
 

@@ -11,7 +11,8 @@
     max-width: 1200px; 
     width: 95%;        
     box-sizing: border-box;
-
+    display: flex;
+    flex-direction: column;
 }
 
 /* Hiệu ứng hai cạnh dọc, bắt đầu dưới hàng tab */
@@ -264,3 +265,19 @@ a:hover{color:#003366}
   text-decoration:underline;
 }
 /* ===== END MST, MTC ===== */
+
+/* ===== FOOTER ===== */
+#result {
+    flex: 1 0 auto;
+}
+
+.page-footer {
+    flex-shrink: 0;
+    margin-top: 10px;
+    padding: 8px;
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    border-top: 1px solid #53edc9;
+}
+/* ===== END FOOTER ===== */

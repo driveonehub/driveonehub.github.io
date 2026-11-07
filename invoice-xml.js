@@ -1099,3 +1099,14 @@ function resetMaTCHdon(btn) {
   });
 })();
 /* ===END DASHBOARD TAB ACTIVE=== */
+
+/* ===== FOOTER ===== */
+(function () {
+    const footer = document.createElement("footer");
+    footer.className = "page-footer";
+    footer.innerHTML = `
+    Chương trình hổ trợ đọc và tra cứu hóa đơn XML TT78. Để thêm đơn vị mới, cập nhật tra cứu, liên hệ điện thoại/zalo: 0973886963, facebook: https://fb.com/ngocloi156
+    `;
+    document.body.appendChild(footer);
+})();
+/* ===== END FOOTER ===== */
