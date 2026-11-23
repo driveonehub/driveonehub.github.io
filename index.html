@@ -392,6 +392,7 @@ const TCGP_LIST = [
     {mst:"0315638251", name:"HT", keywords:"htinvoice"},
     {mst:"0106713804", name:"Hilo", keywords:"hilo"},
     {mst:"0312662961", name:"Haravan", keywords:"haravan"},
+    {mst:"0104789847", name:"Ipos", keywords:"ipos"},
     {mst:"0105844836", name:"Mega", keywords:"mega vinvoice"},
     {mst:"0314185087", name:"Vi Na", keywords:"vina onlinevina"},
     {mst:"0101352495", name:"VNIS", keywords:"vnis"},
@@ -952,6 +953,11 @@ else if(MSTTCGP==="0106713804") { // Hilo
 else if(MSTTCGP==="0312662961") { // Haravan
   add(`- Mã tra cứu: ${MaTCHdon}`);add(`<br>`);
   add(`- `);add(`https://e-invoices.haravan.app/Invoice/Search?taxcode=${MSTNBan}&key=${MaTCHdon}`);add(`<br>`);
+  }
+
+else if(MSTTCGP==="0104789847") { // Ipos
+  add(`- Mã tra cứu: ${MaTCHdon}`);add(`<br>`);
+  add(`- `);add(`https://tracuuhoadon.ipos.vn/Invoice/Search?taxcode=${MSTNBan}&key=${MaTCHdon}`);add(`<br>`);
   }
 
 else if(MSTTCGP==="0105844836") { // Mega
