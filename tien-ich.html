@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tiện ích kế toán</title>
+<link rel="icon" href="iconbill.ico" type="image/x-icon">
+<style>
+*{box-sizing:border-box}
+
+/* ===== DASHBOARD TABS ===== */
+.tabs{
+  font-family: Tahoma, Arial, sans-serif;
+  font-size:14px;
+  line-height:1.1;
+  display:flex;
+  justify-content: flex-start;
+  align-self: stretch;
+  width: calc(100% + 60px);
+  margin-left: -30px;
+  gap:6px;
+  margin-bottom:16px;
+  border-bottom: 2px solid #469ee8;
+  padding-bottom: 0px;
+}
+.tab{
+  padding:8px 26px;
+  background:#e3f2fd;
+  border-radius:8px 8px 0 0;
+  text-decoration:none;
+  color:#045;
+  font-weight:600;
+  transition:all .25s ease;
+  border:1px solid #bbdefb;
+}
+.tab:hover{
+  background:#fa8964;
+}
+.tab.active{
+  background:linear-gradient(135deg,#63f731,#ffffff);
+  color:#003;
+  border-bottom:1px solid #f0fa64;
+}
+/* ===== END DASHBOARD TABS ===== */
+
+
+body {
+  margin: 10px auto;
+  min-height: calc(100vh - 20px);
+  padding: 0px 30px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  position: relative;
+  /* Giới hạn chiều ngang giao diện */
+  max-width: 1200px; 
+  width: 95%;        
+  box-sizing: border-box;
+
+  /* Nền trong suốt */
+  background: none;
+
+  color: var(--text);
+  /font-family: "Trebuchet MS", Arial, sans-serif;
+  font-family: Tahoma, Arial, sans-serif;
+
+}
+
+/* Hiệu ứng hai cạnh dọc, bắt đầu dưới hàng tab */
+body::before {
+    content: "";
+    position: absolute;
+    top: 35px; /* Điều chỉnh vị trí bắt đầu */
+    left: 0px;
+    right: 0px;
+    bottom: 0;
+    z-index: -1;
+    pointer-events: none;
+    border-left: 2px solid #53edc9;
+    border-right: 2px solid #53edc9;
+    border-bottom: 2px solid #53edc9;
+    border-radius: 0 0 14px 14px;
+    box-shadow:
+        inset 8px 0 8px -8px #53edc9,
+        inset -8px 0 8px -8px #53edc9,
+        inset 0 -8px 8px -8px #53edc9;
+    box-sizing: border-box;
+
+    /* dùng hiệu ứng này hoặc box-shadow */
+    /background:
+        linear-gradient(to right,
+            #53edc9 0,
+            transparent 10px
+        ) left top / 10px 100% no-repeat,
+        linear-gradient(to left,
+            #53edc9 0,
+            transparent 10px
+        ) right top / 10px 100% no-repeat;
+}
+
+.card{
+  background:white;padding:10px;
+  margin-bottom:10px;border-radius:12px;
+  box-shadow:0 3px 15px #0000000c;
+  display:flex;align-items:center;
+  justify-content:space-between;gap:15px;
+}
+.card h2{color:#174d7a;font-size:20px}
+.card p{color:#667085;line-height:1.6}
+.btn{
+  display:inline-block;background:#1675cc;
+  color:white;padding:12px 20px;
+  text-decoration:none;border-radius:7px;
+  white-space:nowrap;
+}
+.btn:hover{background:#10599e}
+.tag{color:#16834a;font-size:13px}
+@media(max-width:600px){
+ .card{display:block}
+ .btn{margin-top:10px}
+}
+</style>
+</head>
+<body>
+
+
+<div class="tabs" id="dashboardTabs">
+  <a class="home-link" href="/" title="Trang chủ" aria-label="Trang chủ">
+    <img src="home.png" width="45" height="32" alt="Home"></a>
+  <a class="tab" data-tab="lookup" href="index.html">Tra cứu XML</a>
+  <a class="tab" data-tab="calculate" href="may-tinh.html">Máy tính</a>
+  <a class="tab" data-tab="file" href="so-sanh-file.html">so sánh file</a>
+  <a class="tab" data-tab="extensions" href="#">Tiện ích</a>
+</div>
+<br>
+
+<div class="container">
+  <h2>Danh sách tiện ích chrome hỗ trợ kế toán</h2>
+  <div class="card">
+    <div>
+      <h2>📄<a href="https://chromewebstore.google.com/detail/hamamchpnkeiecicpnlnghmmclgglkep"
+       target="_blank" rel="noopener">Tải hóa đơn điện tử</a></h2>
+      <p> Hỗ trợ thao tác tải hóa đơn điện tử từ hệ thống <a href="https://hoadondientu.gdt.gov.vn">hoadondientu.gdt.gov.vn</a> hàng loạt.
+      </p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div>
+      <h2>🤖<a href="https://chromewebstore.google.com/detail/lojhcfbipgbmpnkajmbeggpmbcibkfde"
+       target="_blank" rel="noopener">Tự động nhập CAPTCHA</a></h2>
+      <p> Hỗ trợ nhận diện và tự động nhập CAPTCHA trên hầu hết các trang web được hỗ trợ.
+      </p>
+      <span class="tag">Dùng thử miễn phí 14 ngày</span>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===DASHBOARD TAB ACTIVE=== */
+(function(){
+  const tabs = document.querySelectorAll('.tab');
+  const params = new URLSearchParams(window.location.search);
+
+  // Mặc định tab hóa đơn
+  let activeTab = 'extensions';
+
+  // Nếu sau này bạn muốn phân tab theo param
+  if(params.get('page')){
+    activeTab = params.get('page');
+  }
+
+  tabs.forEach(t=>{
+    if(t.dataset.tab === activeTab){
+      t.classList.add('active');
+    }
+  });
+})();
+/* ===END DASHBOARD TAB ACTIVE=== */
+
+</script>
+</body>
+</html>
