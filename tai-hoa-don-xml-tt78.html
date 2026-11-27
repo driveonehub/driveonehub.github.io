@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>Hướng Dẫn Tải Hóa Đơn Điện Tử XML Từ Tổng Cục Thuế theo TT78 Mới Nhất</title>
+    <meta name="description" content="Cách tải hóa đơn điện tử XML trực tiếp từ trang hóa đơn điện tử của Tổng cục Thuế cực nhanh và chính xác.
+	Cập nhật hướng dẫn chi tiết tại đây!">
+    <meta name="keywords" content="tải hóa đơn điện tử xml, hóa đơn điện tử xml, tổng cục thuế, tra cứu hóa đơn điện tử">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph (Facebook/Zalo) & Twitter SEO -->
+    <meta property="og:title" content="Hướng Dẫn Tải Hóa Đơn Điện Tử XML Từ Tổng Cục Thuế">
+    <meta property="og:description" content="Click để xem cách tải và tra cứu hóa đơn điện tử XML nhanh gọn từ hệ thống Tổng cục Thuế.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://driveonehub.github.io">
+    
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Lexend:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cloudflare.com">
+
+    <style>
+/* ===== DASHBOARD TABS ===== */
+.tabs{
+  font-family: Tahoma, Arial, sans-serif;
+  font-size:14px;
+  line-height:1.1;
+  display:flex;
+  justify-content: flex-start;
+  align-self: stretch;
+  width: calc(100% + 60px);
+  margin-left: -30px;
+  gap:6px;
+  margin-bottom:16px;
+  border-bottom: 2px solid #469ee8;
+  padding-bottom: 0px;
+}
+.tab{
+  padding:8px 26px;
+  background:#e3f2fd;
+  border-radius:8px 8px 0 0;
+  text-decoration:none;
+  color:#045;
+  font-weight:600;
+  transition:all .25s ease;
+  border:1px solid #bbdefb;
+}
+.tab:hover{
+  background:#fa8964;
+}
+.tab.active{
+  background:linear-gradient(135deg,#63f731,#ffffff);
+  color:#003;
+  border-bottom:1px solid #f0fa64;
+}
+/* ===== END DASHBOARD TABS ===== */
+
+
+body {
+  margin: 10px auto;
+  min-height: calc(100vh - 20px);
+  padding: 0px 30px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  position: relative;
+  /* Giới hạn chiều ngang giao diện */
+  max-width: 1200px; 
+  width: 95%;        
+  box-sizing: border-box;
+
+  /* Nền trong suốt */
+  background: none;
+
+  color: var(--text);
+  /font-family: "Trebuchet MS", Arial, sans-serif;
+  font-family: Tahoma, Arial, sans-serif;
+
+}
+
+/* Hiệu ứng hai cạnh dọc, bắt đầu dưới hàng tab */
+body::before {
+    content: "";
+    position: absolute;
+    top: 35px; /* Điều chỉnh vị trí bắt đầu */
+    left: 0px;
+    right: 0px;
+    bottom: 0;
+    z-index: -1;
+    pointer-events: none;
+    border-left: 2px solid #53edc9;
+    border-right: 2px solid #53edc9;
+    border-bottom: 2px solid #53edc9;
+    border-radius: 0 0 14px 14px;
+    box-shadow:
+        inset 8px 0 8px -8px #53edc9,
+        inset -8px 0 8px -8px #53edc9,
+        inset 0 -8px 8px -8px #53edc9;
+    box-sizing: border-box;
+
+    /* dùng hiệu ứng này hoặc box-shadow */
+    /background:
+        linear-gradient(to right,
+            #53edc9 0,
+            transparent 10px
+        ) left top / 10px 100% no-repeat,
+        linear-gradient(to left,
+            #53edc9 0,
+            transparent 10px
+        ) right top / 10px 100% no-repeat;
+}
+
+        :root {
+            --primary: #4f46e5;
+            --secondary: #06b6d4;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --bg-light: #f8fafc;
+        }
+
+        .container {
+            background: #ffffff;
+            max-width: 1100px;
+            width: 100%;
+            padding: 15px 15px;
+            border-radius: 24px;
+            box-shadow: 0 10px 10px rgba(79, 70, 229, 0.08);
+            text-align: justify;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1.3;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        p {
+            font-size: 16px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 14px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 10px 25px rgba(6, 182, 212, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(6, 182, 212, 0.5);
+            opacity: 0.95;
+        }
+
+        .footer-note {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+    </style>
+
+    <!-- Google Structured Data (Schema JSON-LD) - Cực tốt cho SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Hướng Dẫn Tải Hóa Đơn Điện Tử XML Từ Tổng Cục Thuế",
+      "description": "Cách tải hóa đơn điện tử XML trực tiếp từ trang hóa đơn điện tử của Tổng cục Thuế cực nhanh và chính xác.",
+      "profundityLevel": "Beginner",
+      "inLanguage": "vi"
+    }
+    </script>
+</head>
+<body>
+
+<div class="tabs" id="dashboardTabs">
+  <a class="home-link" href="/" title="Trang chủ" aria-label="Trang chủ">
+    <img src="home.png" width="45" height="32" alt="Home"></a>
+  <a class="tab" data-tab="lookup" href="index.html">Tra cứu XML</a>
+  <a class="tab" data-tab="calculate" href="may-tinh.html">Máy tính</a>
+  <a class="tab" data-tab="file" href="so-sanh-file.html">so sánh file</a>
+  <a class="tab" data-tab="extensions" href="#">Tiện ích</a>
+</div>
+<br>
+
+    <main class="container">
+        <!-- Badge định danh chủ đề bài viết -->
+        <span class="badge"><i class="fa-solid fa-bolt"></i>Hướng dẫn hóa đơn điện tử của Tổng cục thuế</span>
+        
+        <!-- Tiêu đề chứa từ khóa chính (H1 độc nhất cho SEO) -->
+        <h1>Cách Tải Hóa Đơn Điện Tử XML Từ Tổng Cục Thuế</h1>
+        
+        <!-- Nội dung sơ bộ thu hút bot tìm kiếm và người dùng -->
+        <p>
+Hiện tại hầu hết các doanh nghiệp đều đã sử dụng hóa đơn điện tử. Ngoài những ưu điểm còn bộc lộ không ít những hạn chế, rủi ro liên quan đến việc lưu trữ hóa đơn điển hình như:
+<br>– <b>Để tra cứu được hóa đơn gốc</b>: Phải có thông tin về địa chỉ trang website tra cứu và mã tra cứu hoặc tài khoản đăng nhập vào hệ thống tra cứu hóa đơn của bên bán cấp.
+<br>– <b>Nếu hóa đơn được lưu trữ trên mail, thiết bị khác như</b>: USB, ổ cứng máy tính, Driver mail…: Thì vẫn có rủi ro khi bị virus tấn công, bị hỏng ổ cứng, xóa nhầm file…
+<br>– <b>Theo quy định thì bên bán hoặc bên cung cấp truyền tải và lưu trữ hóa đơn điện tử phải lưu trữ chứng từ đó với thời gian 10 năm</b>: Nhưng một khi doanh nghiệp bị thất lạc thông tin tra cứu hóa đơn điện tử thì việc liên hệ bên bán xử lý, cung cấp lại thông tin không hề dễ dàng.
+<br>– <b>Hóa đơn điện tử bản giấy không có giá trị về mặt pháp lý</b> mà phải là dữ liệu theo chuẩn dữ liệu của Cơ quan thuế (File XML) quy định.
+<br><br>=> Như vậy để đảm bảo việc lưu trữ hóa đơn điện tử tối ưu nhất thì khi mua hàng hóa thì tốt nhất kế toán nên in hóa đơn điện tử ra bản giấy thể hiện rõ địa chỉ trang và mã tra cứu đồng thời tải và lưu file XML của hóa đơn điện tử đó ngay tại thời điểm bên bán gửi hóa đơn.
+<br>Để quản lý và lưu trữ dữ liệu kế toán đúng quy chuẩn, việc sở hữu file gốc XML là vô cùng cần thiết.
+<br>Dưới đây là các bước giúp bạn truy cập và tải trực tiếp file hóa đơn XML chính thức từ cổng thông tin Hóa đơn điện tử Tổng cục Thuế về máy tính một cách nhanh chóng và chính xác nhất.
+
+<br><br>🔍 <b>Giá trị pháp lý của định dạng file XML</b>:
+<br>Trong quy trình quản lý hóa đơn, mỗi bộ hồ sơ trả về thường bao gồm hai định dạng:
+<br>• <b>File XML</b>: Bản lưu trữ toàn bộ dữ liệu mã hóa gốc của hóa đơn. Đây là định dạng duy nhất có giá trị pháp lý cao nhất trước pháp luật và cơ quan thuế khi tiến hành quyết toán.
+<br>• <b>File PDF</b>: Bản hiển thị hình ảnh trực quan hỗ trợ người dùng đọc và kiểm tra thông tin bằng mắt thường.
+
+<br><br>🚀 <b>Các bước tải file XML trực tiếp trên hệ thống hoadondientu.gdt.gov.vn</b>:
+
+<br>Bạn cần có tài khoản đăng nhập vào trang www.hoadondientu.gdt.gov.vn (Được cấp qua mail đăng ký sử dụng hóa đơn điện tử. và thực hiện theo thứ tự các bước sau:
+
+<br>1️⃣ <b>Đăng nhập vào hệ thống hóa đơn điện tử Tổng cục Thuế</b>:
+
+<br>• Truy cập vào trang chủ chính thức: <a href="https://hoadondientu.gdt.gov.vn" target="_blank" style="text-decoration: none" rel="noopener">hoadondientu.gdt.gov.vn</a>.
+<br>• Điền chính xác các trường thông tin yêu cầu: Tên đăng nhập (Mã số thuế doanh nghiệp), Mật khẩu và Mã Captcha xác thực hiển thị bên cạnh.
+<br>• Nhấn nút Đăng nhập để truy cập vào hệ thống.
+<br><img src="/img/hddt-tt78-gdt-dang-nhap.png" alt="Dang nhap" style="max-width: 100%; height: auto;">
+
+<br><br>2️⃣ <b>Tra cứu hóa đơn</b>:
+
+<br>• Trên thanh điều hướng bên trên màn hình, chọn mục Tra cứu ➔ Chọn tiếp Tra cứu hóa đơn.
+<br>• Lựa chọn tab chức năng tương ứng với nhu cầu hiện tại: Hóa đơn điện tử mua vào hoặc Hóa đơn điện tử bán ra.
+<br>• Điền các thông tin bộ lọc để khu vực tìm kiếm chính xác hơn (như Khoảng ngày lập hóa đơn, Mã số thuế người bán/người mua...) rồi nhấn nút Tìm kiếm.
+<br><img src="/img/hddt-tt78-gdt-tra-cuu-hoa-don.png" alt="Tra cuu hoa don" style="max-width: 100%; height: auto;">
+
+<br><br>3️⃣ <b>Tải file dữ liệu gốc XML về máy tính</b>:
+
+<br>• Hệ thống sẽ hiển thị danh sách các hóa đơn khớp với bộ lọc ở bảng dữ liệu phía dưới.
+<br>• Tìm đến dòng chứa hóa đơn cần xử lý, click chọn hóa đơn, di chuyển đến cột Thao tác và click vào biểu tượng Xuất xml. File tải về địng dạng file nén zip chứa file xml, html, ...
+<br>Hoặc có thể dùng tiện ích mở rộng chrome tải hàng loạt hóa đơn để tự động tải file về máy.
+<br><img src="/img/hddt-tt78-gdt-tai-xml.png" alt="Tai xml" style="max-width: 100%; height: auto;">
+
+<br><br>💡 <b>Cách giải nén</b>:
+<br>Tệp tin tải về mặc định ở dạng nén .zip. Bạn thực hiện click chuột phải vào file ➔ Chọn Extract Here (Giải nén tại đây) để lấy được file .xml
+<br><img src="/img/hddt-tt78-gdt-giai-nen.png" alt="Giai nen file" style="max-width: 100%; height: auto;">
+
+<br><br>🛠️ <b>Phương thức hiển thị và đọc nội dung file XML</b>:
+<br>Định dạng file XML cấu trúc mã hóa dữ liệu nên không thể mở trực tiếp bằng các trình đọc văn bản thông thường. Để xem nội dung hiển thị chi tiết dưới dạng bảng:
+<br>1. Sử dụng phần mềm iTaxViewer phiên bản mới nhất do Tổng cục Thuế cung cấp.
+<br>2. Hoặc mở file đuôi .html trong file .zip
+<br>3. Hoặc tải trực tiếp file .xml lên các cổng website kiểm tra hóa đơn trực tuyến để hệ thống tự động kết xuất giao diện trực quan.
+<br>Hoặc dùng ứng dụng đọc .xml để tra ra thông tin tra cứu hóa đơn
+        </p>
+        
+        <!-- Nút hành động kêu gọi thao tác -->
+        <a href="https://hoadondientu.gdt.gov.vn" target="_blank" rel="noopener" class="btn">
+            Đi đến Hóa đơn điện tử Thuế <i class="fa-solid fa-arrow-right"></i>
+        </a>
+        
+        <div class="footer-note">
+            © 2026.
+        </div>
+    </main>
+<script>
+/* ===DASHBOARD TAB ACTIVE=== */
+(function(){
+  const tabs = document.querySelectorAll('.tab');
+  const params = new URLSearchParams(window.location.search);
+
+  // Mặc định tab hóa đơn
+  let activeTab = 'extensions';
+
+  // Nếu sau này bạn muốn phân tab theo param
+  if(params.get('page')){
+    activeTab = params.get('page');
+  }
+
+  tabs.forEach(t=>{
+    if(t.dataset.tab === activeTab){
+      t.classList.add('active');
+    }
+  });
+})();
+/* ===END DASHBOARD TAB ACTIVE=== */
+
+</script>
+
+</body>
+</html>
